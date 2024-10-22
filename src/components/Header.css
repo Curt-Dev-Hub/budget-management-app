@@ -1,0 +1,18 @@
+#brand-nav {
+    color: #fdb815;
+}
+#top-nav-style {
+    border-radius: 7px;
+    background-color: rgba(22, 22, 24, 0.9) !important; 
+}
+
+.nav-link {
+    color: aliceblue; 
+}
+.nav-link:hover {
+   color: rgb(241, 200, 17); 
+}
+
+.navbar-toggler {
+    background: cyan;
+}

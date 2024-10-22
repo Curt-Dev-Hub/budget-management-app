@@ -1,0 +1,83 @@
+.component-img {
+    width: 400px;
+    height: 400px;
+} 
+.component-cta-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.user-recent-edits, .graph-component-wrapper {
+    width: 50%;
+}
+.user-recent-edits {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.cta-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+}
+
+.card {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+#card-shadow {
+    box-shadow: 10px 8px 15px;
+} 
+
+
+
+
+@media only screen and (max-width: 600px) {
+    .component-cta-container {
+        flex-direction: column;
+        width: 90%;
+        align-items: center;
+    }
+
+    .component-img {
+        width: 350px;
+        height: 350px;
+        border-radius: 4px;
+    }
+
+    .user-recent-edits {
+        width: 80%;
+        margin-top: 15px;
+        justify-content: unset;
+        align-items: center;
+    }
+
+    .graph-component-wrapper {
+        width: min-content;
+    }
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+} 
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+} 
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    #card-shadow {
+        width: 60%;
+        margin: 30px auto;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .login-form {
+        width: 50%;
+    }
+}

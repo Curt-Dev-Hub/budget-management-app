@@ -1,5 +1,6 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;  */
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   text-rendering: optimizeLegibility;
@@ -7,10 +8,68 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-} */
+html {
+  color-scheme: dark;
+  box-sizing: border-box;
+  width: 100vw;
+  height: fit-content;
+  /* background-image: url('/public/images-medium/annie-spratt-xz485Eku8O4-unsplash.jpg'); */
+  background: rgb(11,5,14);
+  background: linear-gradient(0deg, rgb(16, 130, 150) 0%, rgba(90,217,229,1) 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body {
+  background-color: inherit;
+}
+
+#yellow-gradient1, #yellow-gradient2 {
+  background-image: linear-gradient(to bottom right, #202d2200, yellow);
+}
+
+/* styling for form links */
+.form-link {
+  color: #FFD700;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.form-link:hover {
+  color: #FFA500; /* Darker shade of yellow on hover */
+  border-bottom: 2px solid #FFA500; /* Add border bottom on hover */
+}
+
+
+.card {
+  background-color: inherit;
+}
+
+@media only screen and (max-width: 600px) {
+  
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+} 
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+} 
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  html {
+    min-height: 100vh;
+  }  
+}

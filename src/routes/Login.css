@@ -1,0 +1,56 @@
+.login_register_container {
+    display: flex;
+    justify-content: center;
+    font-family:'Open Sans Condensed', sans-serif;
+}
+
+.login_register_form {
+    margin-top: 30px;
+    background: rgb(161,6,233);
+    background: linear-gradient(0deg, rgba(161,6,233,0.5) 0%, rgba(90,217,229,0.7) 100%);
+    padding-top: 3%;
+    width: 70%;
+    border-radius: 5px;
+}
+
+.form-label {
+    text-align: left;
+    font-weight: bold;
+    display: block;
+    margin-left: 5%;
+    color: indigo;
+}
+
+input[type=text], input[type=password] {
+    width: 80%;
+    margin: 0 auto;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .login_register_form {
+        width: 95%;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+} 
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+} 
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .login-form {
+        width: 50%;
+    }
+}
