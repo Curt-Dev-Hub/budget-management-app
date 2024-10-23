@@ -28,6 +28,12 @@ body {
   background-image: linear-gradient(to bottom right, #202d2200, yellow);
 }
 
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 /* styling for form links */
 .form-link {
   color: #FFD700;
@@ -41,15 +47,22 @@ body {
   color: #FFA500; /* Darker shade of yellow on hover */
   border-bottom: 2px solid #FFA500; /* Add border bottom on hover */
 }
-
-
 .card {
   background-color: inherit;
+  text-align: center;
+}
+
+/* mobile nav-link styling */
+.nav-link {
+  text-align: center;
+  color: aliceblue;
 }
 
 @media only screen and (max-width: 600px) {
-  
-
+  .nav-link {
+    border: aqua 1px solid;
+    margin: 4px;
+  }
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -64,7 +77,9 @@ body {
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-
+  .app {
+    padding-bottom: 26px;
+  }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */

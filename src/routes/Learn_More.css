@@ -1,6 +1,9 @@
 #learn-main-header {
     margin-top: 20px;
 }
+#learn-container {
+    padding-bottom: 38px;
+}
 #learn-card-body {
     display: flex;
     flex-direction: column;
@@ -24,10 +27,9 @@
 }
 
 .card-text-learn:nth-of-type(even) {
-    border-right: 8px solid #1ADDA6;
+    border-right: 8px solid #1ADDA69C;
     border-bottom: 3px solid #2b39595e;
     padding-right: 10px;
-
 }
 .learn-h5 {
     padding: 20px;
@@ -41,15 +43,27 @@
     border: none;
 }
 
+#learn-more-banner {
+    min-width: 100%;
+    max-height: 70vh;
+    object-fit: cover;
+    object-position: center;
+}
+
 
 .card-text {
     margin: 22px auto;
     padding: 4px;
-    text-align: left;
-    /* border-radius: 7px; */
+    text-align: left; /* is also selecting card text in Home component */ 
 }
 
 @media (min-width: 576px) {  }
+
+@media (max-width: 992px) {
+    .learn-h5 {
+        padding: 9px;
+    }
+}
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) {
@@ -65,7 +79,7 @@
         margin-bottom: 41px;
     }
     .card-text {
-        width: 40%;
+        width: 60%;
     }
 }
 
@@ -76,9 +90,13 @@
         padding: 38px;
     }
     .learn-h5 {
-        width: 80%;
+        width: 30%;
     }
 }
 
 /* XX-Large devices (larger desktops, 1400px and up) */
-@media (min-width: 1400px) {  }
+@media (min-width: 1400px) {
+    .learn-h5 {
+        width: 24%;
+    }
+}

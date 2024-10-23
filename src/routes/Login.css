@@ -1,6 +1,7 @@
 .login_register_container {
     display: flex;
     justify-content: center;
+    align-items: center;
     font-family:'Open Sans Condensed', sans-serif;
 }
 
@@ -11,6 +12,7 @@
     padding-top: 3%;
     width: 70%;
     border-radius: 5px;
+    text-align: center;
 }
 
 .form-label {

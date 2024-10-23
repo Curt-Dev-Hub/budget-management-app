@@ -6,8 +6,7 @@ const Home = () => {
     return (
         <Container id='container-home'>
             <Row>
-                {/* <Col><h1>Personal Budgeting App</h1></Col> */}
-                <h1>Personal Budgeting App</h1>
+                <h1 id='home-h1'>Personal Budgeting App</h1>
             </Row>
             <Row>
                 <h2 id='home-h2'>An Easy  Way To Manage Your Finances With One Application</h2>
@@ -24,7 +23,7 @@ const Home = () => {
                 <Card.Header>Seeing a visual breakdown of your incomings and outgoings makes creating a budget easier</Card.Header>
                 <Card.Body id='yellow-gradient1'>
                     <Card.Title>Keep Track Of Incomings and Outgoings</Card.Title>
-                    <Card.Text>
+                    <Card.Text style={{textAlign: 'center'}}>  {/* style here is to override style from Learn component for now */}
                         With supporting text below as a natural lead-in to additional content.
                     </Card.Text>
                     <Button size="lg" href='#' variant="dark">Get Started</Button>

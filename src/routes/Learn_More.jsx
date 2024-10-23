@@ -9,7 +9,7 @@ const Learn_More = () => {
             <h1 id='learn-main-header'>10 Advantages of Tracking and Planning Ahead with Personal Financial Budgeting</h1>
             <Card>
                 <Card.Body id='learn-card-body'>
-                    <Card.Img variant="top" src="public\images-small\steve-johnson-WVUrbhWtRNM-unsplash.jpg"></Card.Img>
+                    <Card.Img variant="top" id='learn-more-banner' src="public\images-small\steve-johnson-WVUrbhWtRNM-unsplash.jpg"></Card.Img>
                     <Card.Title className='learn-h5'>1. Increased Financial Control</Card.Title>
                     <Card.Text className='card-text-learn'>Understanding your income and expenses gives you a clearer picture of your financial situation.</Card.Text>
                     <Card.Title className='learn-h5'>2. Reduced Stress</Card.Title>

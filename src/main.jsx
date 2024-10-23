@@ -48,7 +48,7 @@ const router = createBrowserRouter([
 
 
 function Main() {
-  const [isWide, setIsWide] = useState(window.innerWidth > 950);
+  const [isWide, setIsWide] = useState(window.innerWidth > 1200);
 
   useEffect(() => {
     function handleResize() {
@@ -62,13 +62,17 @@ function Main() {
   }, []);
 
   return (
-    <React.StrictMode>
+    <div className='app'>
       <Header /> {/* This should always be displayed */}
       {isWide && <Footer />}
       <RouterProvider router={router} />
-    </React.StrictMode>
+    </div>  
   );
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Main />);
+root.render(
+<React.StrictMode>
+  <Main />
+</React.StrictMode>
+);
