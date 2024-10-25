@@ -1,5 +1,6 @@
 import { Container, Card, Button } from 'react-bootstrap'
 import './Dashboard.css'
+import { Link } from 'react-router-dom'
 
 
 const Dashboard = () => {
@@ -7,9 +8,9 @@ const Dashboard = () => {
     return (
         <Container id='container-dashboard'>
             <Card id='card-shadow'>
-                <Card.Body id='yellow-gradient2' style={{textAlign: "left"}}>Hi Leonardo 👋,<br /><br /> Good afternoon to you. <br />
+                <Card.Body id='yellow-gradient2' style={{textAlign: "left", paddingLeft: "16%"}}>Hi Leonardo 👋,<br /><br /> Good afternoon to you. <br />
                 Please use the button below to start editing your budget data. <br />       
-                <Button variant="primary">Go somewhere</Button>           
+                <Link href="budget-edit"><Button variant="primary">Go somewhere</Button></Link>           
                 </Card.Body>
             </Card>
             <div className='component-cta-container'>

@@ -1,6 +1,7 @@
 import "./Budget_Edit.css";
-import { Container } from "react-bootstrap";
+import { Button, Card, CardBody, Container, Stack } from "react-bootstrap";
 import { useState } from "react";
+import Budget from "./Budget";
 
 
 function getDate() {
@@ -10,21 +11,32 @@ function getDate() {
     const month = today.getMonth() + 1;
     const year = today.getFullYear();
     const date = today.getDate();
-    // return `${month}/${date}/${year}`;
-    return `${stringMonth}`;
+    return `${date} ${stringMonth} ${year}`;
 }
 
 const Budget_Edit = () => {
     const [currentDate, setCurrentDate] = useState(getDate());
     return (
-        <Container id="edit-budget-main-container">
-            <div>
-                <h2>Here you can edit your monthly Budget</h2>
+        <Container className="my-4">
+            <Stack id="edit-budget-container" direction="horizontal" gap={2} className="mb-4">
+                <h2 className="me-auto">Edit your monthly Budgets</h2>
                 <p>Here is your current budget for <b><u>{currentDate}</u></b></p>
-                {/* <p>{stringMonth}</p> */}
-            </div>
-        </Container>
-    )
+                <Button variant="primary">Add A Budget</Button> 
+                <Button variant="outline-primary">Add Expense</Button>
+                <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                        gap: "1rem",
+                        alignItems: "flex-start",
+                    }}
+                >
+                    <Budget name="Subscriptions" amount={200} max={1000} />
+                </div>
+                
+        </Stack>
+      </Container>
+    );
 }
 
 
@@ -33,3 +45,5 @@ export default Budget_Edit
 
 
 // calender reference - https://www.npmjs.com/package/react-calendar
+
+
