@@ -24,6 +24,7 @@ body {
   background-color: inherit;
 }
 
+/* yellow gradient background for dashboard and home cards */
 #yellow-gradient1, #yellow-gradient2 {
   background-image: linear-gradient(to bottom right, #202d2200, yellow);
 }
