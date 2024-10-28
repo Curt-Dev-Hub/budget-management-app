@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import './index.css'
 import Budget_Edit from './components/Budget_Edit.jsx';
+import { BudgetsProvider } from './contexts/BudgetsContext.jsx';
 
 // create routes
 const router = createBrowserRouter([
@@ -73,6 +74,8 @@ function Main() {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 <React.StrictMode>
-  <Main />
+  <BudgetsProvider>
+    <Main />
+  </BudgetsProvider>
 </React.StrictMode>
 );
