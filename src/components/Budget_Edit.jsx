@@ -1,5 +1,5 @@
 import "./Budget_Edit.css";
-import { Button, Card, CardBody, Container, Stack } from "react-bootstrap";
+import { Button, Container, Stack } from "react-bootstrap";
 import { useState } from "react";
 import Budget from "./Budget";
 
@@ -31,11 +31,10 @@ const Budget_Edit = () => {
                         alignItems: "flex-start",
                     }}
                 >
-                    <Budget name="Subscriptions" amount={200} max={1000} />
+                    <Budget name="Subscriptions" amount={500} max={1000} />
                 </div>
-                
-        </Stack>
-      </Container>
+             </Stack>
+        </Container>
     );
 }
 
