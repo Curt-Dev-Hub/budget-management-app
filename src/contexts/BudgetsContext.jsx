@@ -5,7 +5,7 @@ import { v4 as uuidV4} from 'uuid'
 
 const BudgetsContext = React.createContext()
 
-// allow for use of context accross application
+//! allow for use of context accross application
 export function useBudgets() { 
     return useContext(BudgetsContext)
 }
