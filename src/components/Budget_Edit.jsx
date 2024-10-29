@@ -2,6 +2,7 @@ import "./Budget_Edit.css";
 import { Button, Container, Stack } from "react-bootstrap";
 import { useState } from "react";
 import Budget from "./Budget";
+import AddBudgetModal from "./AddBudgetModal";
 
 
 function getDate() {
@@ -18,6 +19,7 @@ const Budget_Edit = () => {
     const [currentDate, setCurrentDate] = useState(getDate());
     return (
         <Container className="my-4">
+            <AddBudgetModal show />
             <Stack id="edit-budget-container" direction="horizontal" gap={2} className="mb-4">
                 <h2 className="me-auto">Edit your monthly Budgets</h2>
                 <p>Here is your current budget for <b><u>{currentDate}</u></b></p>

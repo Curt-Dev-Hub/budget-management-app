@@ -9,7 +9,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Learn_More from './routes/Learn_More.jsx';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
-import AddBudgetModal from './components/AddBudgetModal.jsx';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -66,7 +65,6 @@ function Main() {
   return (
     <div className='app'>
       <Header /> {/* This should always be displayed */}
-      <AddBudgetModal show/>
       {isWide && <Footer />}
       <RouterProvider router={router} />
     </div>  
