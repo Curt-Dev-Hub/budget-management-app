@@ -1,5 +1,5 @@
-//! HERE WE WILL WANT TO INTEGRATE DATA INTO BACK END
-//! COULD ALSO CONSIDER LOCALSTORAGE IN INITIAL STAGES
+                                        //! HERE WE WILL WANT TO INTEGRATE DATA INTO BACK END
+
 import React, { useContext, useState } from "react"
 import { v4 as uuidV4} from 'uuid'
 
