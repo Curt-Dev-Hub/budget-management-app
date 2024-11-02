@@ -16,6 +16,7 @@ import {
 import './index.css'
 import Budget_Edit from './components/Budget_Edit.jsx';
 import { BudgetsProvider } from './contexts/BudgetsContext.jsx';
+import { LoginProvider } from './contexts/LoginContext.jsx';
 
 // create routes
 const router = createBrowserRouter([
@@ -53,7 +54,7 @@ function Main() {
 
   useEffect(() => {
     function handleResize() {
-      setIsWide(window.innerWidth > 950);
+    setIsWide(window.innerWidth > 950);
     }
     window.addEventListener('resize', handleResize);
     // Call handler so state gets updated with initial window size 
@@ -74,8 +75,10 @@ function Main() {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 <React.StrictMode>
+  <LoginProvider>
   <BudgetsProvider>
     <Main />
   </BudgetsProvider>
+  </LoginProvider>
 </React.StrictMode>
 );

@@ -1,16 +1,38 @@
 import './Login.css';
+import { useContext, useRef } from 'react';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useRef } from 'react';
+import axios from 'axios';
+
+import { LoginContext } from '../contexts/LoginContext.jsx'
 
 
 function Login() {
     const userNameRef = useRef("")
     const passwordRef = useRef("")
+    const { setLoginStatus } = useContext(LoginContext)
 
     function handleSubmit(e) {
-        e.preventDefault()
-        
+        e.preventDefault();
+        axios
+            .post("localhost/api/login.php", {
+                username: userNameRef.current.value,
+                password: passwordRef.current.value
+            })
+            .then((response) => {
+                console.log(response);
+                if(response.data === "success") {
+                    setLoginStatus(true);
+                    window.location.href = "/dashboard";
+                } else {
+                    //could direct to php error page 
+                    //could create react error page
+                    alert(`Login failed due to: ${response.data.message}`)
+                }
+            })
+            .catch((error) => {
+                console.error("There was an error logging in!", error)
+            }) 
     }
 
     return (
