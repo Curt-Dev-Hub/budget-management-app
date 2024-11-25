@@ -30,9 +30,15 @@ function Login() {
                     alert(`Login failed due to: ${response.data.message}`)
                 }
             })
-            .catch((error) => {
-                console.error("There was an error logging in!", error)
-            }) 
+
+            // below test successful
+            // .get('localhost/budget-api/config/dbconfig.php')
+            // .then((response) => {
+            //     console.log(response)
+            // })
+            // .catch((error) => {
+            //     console.error("There was an error logging in!", error)
+            // }) 
     }
 
     return (

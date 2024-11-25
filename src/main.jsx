@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client'
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import ErrorPage from './routes/Error-page.jsx';
 import Home from './routes/Home.jsx';
 import Dashboard from './routes/Dashboard.jsx';
@@ -22,28 +23,28 @@ import { LoginProvider } from './contexts/LoginContext.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-    errorElement: <ErrorPage />
+    element: <ErrorBoundary><Home /></ErrorBoundary>,
+    errorElement: <ErrorBoundary><ErrorPage /></ErrorBoundary>
   },
   {
     path: "dashboard",
-    element: <Dashboard />
+    element: <ErrorBoundary><Dashboard /></ErrorBoundary>
   },
   {
     path: "login",
-    element: <Login />
+    element: <ErrorBoundary><Login /></ErrorBoundary>
   },
   {
     path: "register",
-    element: <Register />
+    element: <ErrorBoundary><Register /></ErrorBoundary>
   },
   {
     path: "edit-budget",
-    element: <Budget_Edit/>
+    element: <ErrorBoundary><Budget_Edit/></ErrorBoundary>
   },
   {
     path: "learn-more-about-personal-budgeting",
-    element: <Learn_More />
+    element: <ErrorBoundary><Learn_More /></ErrorBoundary>
   }
 ]);
 
@@ -75,10 +76,12 @@ function Main() {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 <React.StrictMode>
-  <LoginProvider>
-  <BudgetsProvider>
-    <Main />
-  </BudgetsProvider>
-  </LoginProvider>
+  <ErrorBoundary>
+    <LoginProvider>
+      <BudgetsProvider>
+        <Main />
+      </BudgetsProvider>
+    </LoginProvider>
+  </ErrorBoundary>
 </React.StrictMode>
 );
