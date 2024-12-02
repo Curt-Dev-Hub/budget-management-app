@@ -18,8 +18,9 @@ import './index.css'
 import Budget_Edit from './components/Budget_Edit.jsx';
 import { BudgetsProvider } from './contexts/BudgetsContext.jsx';
 import { LoginProvider } from './contexts/LoginContext.jsx';
+import Logout from './routes/Logout.jsx';
 
-// create routes
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "learn-more-about-personal-budgeting",
     element: <ErrorBoundary><Learn_More /></ErrorBoundary>
+  },
+  {
+    path: "logout",
+    element: <ErrorBoundary><Logout /></ErrorBoundary>
   }
 ]);
 

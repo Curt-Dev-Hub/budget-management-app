@@ -13,14 +13,26 @@ function Register() {
     const userNameRef = useRef("")
     const passwordRef = useRef("")
 
+    function validateInput(input) {
+      const sanitizedInput = input.trim();
+      return sanitizedInput.length >= 8 && 
+             /^[a-zA-Z0-9_]+$/.test(sanitizedInput);
+    }
+
+    // Purpose is to display information to user regarding incorrect credentials
     const [error, setError] = useState('')
 
     const {setLoginStatus} = useContext(LoginContext);
     function handleSubmit(e) {
         e.preventDefault();
         setError('');
+
+        if(!validateInput(passwordRef.current.value) || passwordRef.current.value.length < 8 ) {
+          setError("Invalid password format")
+          return
+        }
         axios
-            .post("http://localhost/budget-api/register.php", {
+            .post("https://localhost/budget-api/register.php", {
                 name: nameRef.current.value,
                 username: userNameRef.current.value,
                 password: passwordRef.current.value

@@ -1,5 +1,5 @@
 import './Login.css';
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
@@ -11,54 +11,79 @@ function Login() {
     const userNameRef = useRef("")
     const passwordRef = useRef("")
     const { setLoginStatus } = useContext(LoginContext)
+    const { checkSession } = useContext(LoginContext)
+
+    const [ errorMessage, setErrorMessage ] = useState("")
 
     function handleSubmit(e) {
         e.preventDefault();
         axios
-            .post("localhost/api/login.php", {
+            .post("http://localhost/budget-api/login.php", {
                 username: userNameRef.current.value,
                 password: passwordRef.current.value
-            })
-            .then((response) => {
-                console.log(response);
-                if(response.data === "success") {
-                    setLoginStatus(true);
-                    window.location.href = "/dashboard";
-                } else {
-                    //could direct to php error page 
-                    //could create react error page
-                    alert(`Login failed due to: ${response.data.message}`)
+            }, 
+            {
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             })
-
-            // below test successful
-            // .get('localhost/budget-api/config/dbconfig.php')
-            // .then((response) => {
-            //     console.log(response)
-            // })
-            // .catch((error) => {
-            //     console.error("There was an error logging in!", error)
-            // }) 
+          
+            .then((response) => {
+                if(response.data.status === "success") {
+                    // console.log(response);
+                    setLoginStatus(true);
+                    checkSession()
+                    window.location.href = "/dashboard";
+                } 
+                else  {
+                    alert("Still Not Logged In Mate")
+                    setErrorMessage(`${response.data.message}`)
+                }
+            })
+            .catch((error) => {
+                console.log(error.status)
+                if(error.status === 401) {
+                    setErrorMessage("Invalid credentials: You have entered an incorrect Username or Password")
+                } 
+            })
     }
 
     return (
-        <div className='login_register_container'>
-        <Form className='login_register_form' onSubmit={handleSubmit}>
-            <Form.Group className="login_register" controlId='username'>
-                {/* //TODO: Conditionally Rendered elements needed here in case of incorrect credentials */}
-                <Form.Label>Username</Form.Label>
-                <Form.Control ref={userNameRef} type="text" placeholder="Your username" required />
-            </Form.Group>
-            <br />
-            <Form.Group>
-                {/* //TODO: Conditionally Rendered elements needed here in case of incorrect credentials */}
-                <Form.Label>Password</Form.Label>
-                <Form.Control ref={passwordRef} type="password" placeholder="Your password" required />
-            </Form.Group>
-            <Button as="input" type="submit" value="Login" />{' '}
-            <p>Not yet a member? <a className='form-link' href="register">Register Here</a></p>                                       
+      <div className="login_register_container">
+        <Form className="login_register_form" onSubmit={handleSubmit}>
+          {errorMessage && (
+            <div className="alert alert-danger" role="alert">
+              {errorMessage}
+            </div>
+          )}
+          <Form.Group className="login_register" controlId="username">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              ref={userNameRef}
+              type="text"
+              placeholder="Your username"
+              required
+            />
+          </Form.Group>
+          <br />
+          <Form.Group>
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              ref={passwordRef}
+              type="password"
+              placeholder="Your password"
+              required
+            />
+          </Form.Group>
+          <Button as="input" type="submit" value="Login" />{" "}
+          <p>
+            Not yet a member?{" "}
+            <a className="form-link" href="register">
+              Register Here
+            </a>
+          </p>
         </Form>
-        </div>
+      </div>
     );
 }
 

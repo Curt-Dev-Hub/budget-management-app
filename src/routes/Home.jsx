@@ -9,7 +9,7 @@ const Home = () => {
                 <h1 id='home-h1'>Personal Budgeting App</h1>
             </Row>
             <Row>
-                <h2 id='home-h2'>An Easy  Way To Manage Your Finances With One Application</h2>
+                <h2 style={{ textAlign: "center" }} id='home-h2'>An Easy  Way To Manage Your Finances With One Application</h2>
             </Row>
             <p id='intro-para'>Introducing BudgetMaster, the ultimate tool for efficient financial planning. 
                 Our platform empowers you to track your spending, visualize your savings, 
@@ -29,14 +29,9 @@ const Home = () => {
                     <Button size="lg" href='#' variant="dark">Get Started</Button>
                     <Button size="lg" href='learn-more-about-personal-budgeting' variant="primary">Learn More</Button>
                 </Card.Body>
-                {/* <Card.Footer className="text-muted">2 days ago</Card.Footer> */}
             </Card>
         </Container>
     )
 }
 
 export default Home;
-
-
-{/* <Card.Img variant="top" thumbnail src="/images-medium/budget-home-img.jpg"/> */}
-{/* <Image src="/images-medium/budget-home-img.jpg" thumbnail /> */}

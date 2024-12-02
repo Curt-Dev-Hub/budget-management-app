@@ -4,10 +4,18 @@ import './Dashboard.css'
 
 
 const Dashboard = () => {
+    const date = new Date();
+    const showTime = date.getHours() 
+        + ':' + date.getMinutes()
+        + ':' + date.getMinutes();
+    console.log(showTime);
+
+    const greeting = date.getHours() < 12 ? 'morning' : date.getHours() <= 18 ? 'afternoon' : 'evening';
+
     return (
         <Container id='container-dashboard'>
             <Card id='card-shadow'>
-                <Card.Body id='yellow-gradient2' style={{textAlign: "left", paddingLeft: "16%"}}>Hi Leonardo 👋,<br /><br /> Good afternoon to you. <br />
+                <Card.Body id='yellow-gradient2' style={{textAlign: "left", paddingLeft: "16%"}}>Hi Leonardo 👋,<br /><br /> Good {greeting} to you. <br />
                 Please use the button below to start editing your budget data. <br />       
                 <Button variant="primary" href="/edit-budget">Go somewhere</Button>           
                 </Card.Body>
