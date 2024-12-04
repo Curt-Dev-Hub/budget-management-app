@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client'
 import ErrorBoundary from './components/ErrorBoundary.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx';
 import ErrorPage from './routes/Error-page.jsx';
 import Home from './routes/Home.jsx';
 import Dashboard from './routes/Dashboard.jsx';
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <ErrorBoundary><Dashboard /></ErrorBoundary>
+    element: (<ErrorBoundary><PrivateRoute component={ Dashboard } /></ErrorBoundary>)    
   },
   {
     path: "login",

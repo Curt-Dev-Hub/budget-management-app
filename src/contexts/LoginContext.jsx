@@ -14,6 +14,8 @@ export function useLoginStatus() {
 export const LoginProvider = ({ children }) => {
     const [loginStatus, setLoginStatus] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
+    const [name, setName] = useState(null)
+
 
     // Configure axios defaults
     useEffect(() => {
@@ -78,6 +80,9 @@ export const LoginProvider = ({ children }) => {
                 withCredentials: true
             });
             const parsedData = parseResponse(response.data)
+            setName(parsedData.data.name || "Generic")
+            console.log(parsedData.data.name)
+            console.log(name)
             setLoginStatus(parsedData.data.message || false)
         } catch(error) {
             console.error('There was an error while checking login status: ', error)
@@ -100,6 +105,7 @@ export const LoginProvider = ({ children }) => {
             });
             if(response.data.status === "success") {
                 setLoginStatus(false);
+                setName("")
                 window.location.href = `/logout?message=${encodeURIComponent(response.data.message)}`;   
             } else {
                 console.error('Logout failed: ', response.data.message);
@@ -112,6 +118,7 @@ export const LoginProvider = ({ children }) => {
     }    
         
     return <LoginContext.Provider value={{
+        name,
         loginStatus,
         setLoginStatus,
         logout,
