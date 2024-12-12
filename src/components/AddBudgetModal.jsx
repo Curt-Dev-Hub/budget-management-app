@@ -1,6 +1,7 @@
 import { Modal, Form, Button } from "react-bootstrap";
 import { useRef } from "react"; //* We want to track the form values name and max 
 import { useBudgets } from "../contexts/BudgetsContext";
+import axios from "axios";
 
 
 
@@ -10,16 +11,68 @@ export default function AddBudgetModal({ show, handleClose }) {
     const maxRef = useRef(0)
     const { addBudget } = useBudgets()
 
-    function handleSubmit(e) {  //! this will likely be amended when implementing the back end
+    function validateMaxInput(input) {
+        const sanitizedInput = input.trim();
+        return sanitizedInput.length >= 8 && 
+            /^(\d{1,10})?(\.\d{2})?$/.test(sanitizedInput);
+    }
+
+    function validateNameInput(input) {
+        const sanitizedInput = input.trim();
+        return sanitizedInput.length >=
+    }
+
+    const [error, setError] = useState('')
+    
+
+   
+          
+  
+
+  //!  -------------------------------------------------------------------------------------------------------------------------------------
+
+    function handleSubmit(e) {  
         e.preventDefault()
         
-        addBudget(
-        {
+        addBudget({
              name: nameRef.current.value,
              max: parseFloat(maxRef.current.value)
         })
         handleClose()
+
+        //! Currently working on this http request ------------------------------------------------------------------------------------
+
+        if(!validateMaxInput(maxRef.current.value)) {
+            setError("Invalid Budget Max format, ensure this is a number")
+            return
+        }
+        if() {
+
+        }
+          axios
+              .post("https://localhost/budget-api/update_budget.php", {
+                  name: nameRef.current.value,
+                  max: parseFloat(maxRef.value.current)
+              }, {
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              })
+              .then((response) => {
+                  if(response.data.status === "success") {
+                      setLoginStatus(true);
+                    
+                  } else {
+                      setError(response.data.message || 'registration failed');
+                      alert(`Registration failed due to: ${response.data.message}`)
+                  }
+              })
+              .catch((error) => {
+                  console.error('Budget not added due to: ', error);
+                  setError('An unexpected error occurred. Please try again.')
+              })
     }
+
   return (
     <Modal show={ show } onHide={ handleClose } >
         <Form onSubmit={ handleSubmit }>

@@ -5,25 +5,14 @@ import Budget from "./Budget";
 import AddBudgetModal from "./AddBudgetModal";
 
 
-function getDate() {
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const today = new Date();
-    const stringMonth = months[today.getMonth()];
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const date = today.getDate();
-    return `${date} ${stringMonth} ${year}`;
-}
-
 const Budget_Edit = () => {
-    const [currentDate, setCurrentDate] = useState(getDate());
+    const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
     return (
         <Container className="my-4">
-            <AddBudgetModal show />
+            <AddBudgetModal show={ showAddBudgetModal } handleClose={() => setShowAddBudgetModal(false)} />
             <Stack id="edit-budget-container" direction="horizontal" gap={2} className="mb-4">
                 <h2 className="me-auto">Edit your monthly Budgets</h2>
-                <p>Here is your current budget for <b><u>{currentDate}</u></b></p>
-                <Button variant="primary">Add A Budget</Button> 
+                <Button variant="primary" onClick={() => setShowAddBudgetModal(true) }>Add A Budget</Button> 
                 <Button variant="outline-primary">Add Expense</Button>
                 <div
                     style={{

@@ -5,7 +5,6 @@ import { v4 as uuidV4} from 'uuid'
 
 const BudgetsContext = React.createContext()
 
-//! allow for use of context accross application
 export function useBudgets() { 
     return useContext(BudgetsContext)
 }
@@ -26,6 +25,9 @@ export function useBudgets() {
 //     amount:
 //     description:
 // }
+
+
+//TODO: An API call will need to be setup here to query any previous budget info and update state
 
 export const BudgetsProvider = ({ children }) => {
     const [budgets, setBudgets] = useState([])  //* functions below can be based of on the state here
