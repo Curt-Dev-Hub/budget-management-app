@@ -30,13 +30,11 @@ function Login() {
           
             .then((response) => {
                 if(response.data.status === "success") {
-                    // console.log(response);
                     setLoginStatus(true);
                     checkSession()
                     window.location.href = "/dashboard";
                 } 
                 else  {
-                    alert("Still Not Logged In Mate")
                     setErrorMessage(`${response.data.message}`)
                 }
             })
