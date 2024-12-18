@@ -17,9 +17,9 @@ export const LoginProvider = ({ children }) => {
     const [name, setName] = useState(null)
 
 
-    // Configure axios defaults
+    // Configure defaults
     useEffect(() => {
-        // Configure axios globally
+        // global configuration
         axios.defaults.baseURL = 'http://localhost'; // Base URL
         axios.defaults.withCredentials = true;
         
@@ -47,7 +47,7 @@ export const LoginProvider = ({ children }) => {
             }
         );
 
-        // Cleanup interceptors
+        // Cleanup
         return () => {
             axios.interceptors.request.eject(requestInterceptor);
             axios.interceptors.response.eject(responseInterceptor);
@@ -73,7 +73,7 @@ export const LoginProvider = ({ children }) => {
         return null;
       };
 
-    // Session check method
+    // user authentication check method
     const checkSession = async () => {
         try {
             const response = await axios.get('/budget-api/includes/session.inc.php', {

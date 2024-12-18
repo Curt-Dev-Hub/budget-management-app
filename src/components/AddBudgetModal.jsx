@@ -41,7 +41,7 @@ export default function AddBudgetModal({ show, handleClose }) {
         // handleClose()
 
         //! Currently working on this http request ------------------------------------------------------------------------------------
-        //! Update.. Now able to send to database
+        // Update.. Now able to send to database
         if(!validateMaxInput(maxRef.current.value)) {
             setError("Invalid Budget Max format, ensure this is a number")
             return

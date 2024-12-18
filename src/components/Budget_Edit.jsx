@@ -7,7 +7,7 @@ import { useBudgets } from "../contexts/BudgetsContext";
 import AddExpenseModal from "./AddExpenseModal";
 
 const Budget_Edit = () => {
-    // const { budgets } = useBudgets() WORKING ON THIS WITH THE BELOW
+    const { budgets } = useBudgets()
     const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
     const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
     const [addExpenseModalBudgetId, setAddExpenseModalBudgetId] = useState();
@@ -34,11 +34,11 @@ const Budget_Edit = () => {
                         gap: "1rem",
                         alignItems: "flex-start",
                     }}
-                >        {/* NEED TO WORK ON THIS SECTION SOON */}
-                    {/* {budgets.map(budget => (
-                        <Budget key={budget.id} name={budget.name} amount={500} max={budget.max} onAddExpenseClick={() => openAddExpenseModal(budget.id)} />    
-                    ))} */}
-                    <Budget name="Subscriptions" amount={500} max={1000} />
+                >  
+                    {budgets.map(budget => (
+                        <Budget key={budget.id} name={budget.name} amount={200} max={budget.max} onAddExpenseClick={() => openAddExpenseModal(budget.id)} />    
+                    ))}
+                    {/* <Budget name="Subscriptions" amount={500} max={1000} /> */}
                 </div>
              </Stack>
         </Container>

@@ -86,7 +86,6 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
   return (
     <Modal show={show} onHide={handleClose}>
       <Form onSubmit={handleSubmit}>
-        {/* //! working on  */}
         {error && (
           <div
             className="alert alert-danger"
@@ -138,7 +137,6 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
             <Form.Select 
               defaultValue={ defaultBudgetId }
               ref={ budgetIdRef }
-            //   type="number"
               required
             >
                 <option id={UNCATEGORISED_BUDGET_ID}>Uncategorised</option>
@@ -150,7 +148,6 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
             </Form.Select>
 
           </Form.Group>
-          {/* -------------------------------------------------------------- */}
           <div className="d-flex justify-content-end">
             <Button variant="primary" type="submit" title="Add to budget">
               Add
