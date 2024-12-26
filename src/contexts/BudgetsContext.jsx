@@ -13,11 +13,11 @@ export function useBudgets() {
 
 export const BudgetsProvider = ({ children }) => {
     const [budgets, setBudgets] = useState([])  // DONE: Now receiving budgets - Requires further testing
-    const [expenses, setExpenses] = useState([]) //! THESE WILL NEED TO BE INITIALLY UPDATED BY A NETWORK REQUEST -- THEN POSSIBLY CAN BE 
+    const [expenses, setExpenses] = useState([]) // DONE: Now receiving expenses - Requires further testing
 
     const { loginStatus } = useLoginStatus()
 
-    //TODO: An API call will need to be setup here to query any previous budget info and update state
+    
     const checkBudgets = async () => {
         try {
             const response = await axios.get('/budget-api/check_budgets.php', {
@@ -36,17 +36,37 @@ export const BudgetsProvider = ({ children }) => {
             // }
         }
     }
+
+    const checkExpenses = async () => {
+        try {
+            const response = await axios.get('/budget-api/check_expenses.php', {
+                withCredentials: true
+            });
+            if(response.data.message === "Expenses Found") {
+                setExpenses(response.data.data)
+            } 
+            
+        } catch(error) {
+            console.error('There was an error receiving expenses: ', error)
+            // } finally {
+            //     setIsLoading(false);
+            // }
+        }
+    }
     useEffect(() => {
         if(loginStatus) {
             checkBudgets();
+            setTimeout(() => { checkExpenses() }, 1500)
             console.log("checkBudgets ran")
+            console.log("Also checkExpenses ran")
         }
     }, [loginStatus]) 
 
 
     function getBudgetExpenses(budgetId) {
-        return expenses.filter(expense => expense.budgetId === budgetId) // to specify which individual budget to target 
+        return expenses.filter(expense => expense.budget_id === budgetId) // to specify which individual budget to target 
     }
+
 
     function addExpense(description, amount, budgetId) {
         setExpenses(prevExpenses => {

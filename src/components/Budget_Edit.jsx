@@ -7,7 +7,7 @@ import { useBudgets } from "../contexts/BudgetsContext";
 import AddExpenseModal from "./AddExpenseModal";
 
 const Budget_Edit = () => {
-    const { budgets } = useBudgets()
+    const { budgets, getBudgetExpenses } = useBudgets()
     const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
     const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
     const [addExpenseModalBudgetId, setAddExpenseModalBudgetId] = useState();
@@ -22,7 +22,7 @@ const Budget_Edit = () => {
     return (
         <Container className="my-4">
             <AddBudgetModal show={ showAddBudgetModal } handleClose={() => setShowAddBudgetModal(false)} />
-            <AddExpenseModal show={ showAddExpenseModal } handleClose={() => setShowAddExpenseModal(false)} />  
+            <AddExpenseModal show={ showAddExpenseModal } defaultBudgetId={addExpenseModalBudgetId} handleClose={() => setShowAddExpenseModal(false)} />  
             <Stack id="edit-budget-container" direction="horizontal" gap={2} className="mb-4">
                 <h2 className="me-auto">Edit your monthly Budgets</h2>
                 <Button variant="primary" onClick={() => setShowAddBudgetModal(true) }>Add A Budget</Button> 
@@ -35,10 +35,13 @@ const Budget_Edit = () => {
                         alignItems: "flex-start",
                     }}
                 >  
-                    {budgets.map(budget => (
-                        <Budget key={budget.id} name={budget.name} amount={200} max={budget.max} onAddExpenseClick={() => openAddExpenseModal(budget.id)} />    
-                    ))}
-                    {/* <Budget name="Subscriptions" amount={500} max={1000} /> */}
+                    {budgets.map(budget => {
+                        const amount = getBudgetExpenses(budget.id).reduce((total, expense) => total + parseFloat(expense.amount), 0)
+                        console.log(amount)
+                        return (
+                            <Budget key={budget.id} name={budget.name} amount={amount} max={budget.max} onAddExpenseClick={() => openAddExpenseModal(budget.id)} />
+                        )
+                    })}
                 </div>
              </Stack>
         </Container>

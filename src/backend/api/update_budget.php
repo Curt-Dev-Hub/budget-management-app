@@ -2,12 +2,11 @@
 require_once 'config/request_config.php';
 include 'config/dbconfig.php';
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
-if (!isset($_SESSION['user_id'], $_SESSION['loggedIn']))
-{
-    exit;
-}
 
 function createResponses($status, $message, $data = [])
 {
@@ -20,6 +19,12 @@ function createResponses($status, $message, $data = [])
     return json_encode($response);
 }
 
+
+if (!isset($_SESSION['userId'], $_SESSION['loggedIn']))
+{
+    echo createResponses("error", "You must be logged in to access this feature"); //! Need to check this - potential security issue
+    exit;
+}
 
 function validateInput($input)
 {
@@ -55,38 +60,41 @@ if($data)
         exit;
     }
 
-    $name = trim($data['username']);
+    $name = trim($data['name']);
     $max = $data['max'];
     
     if (!validateInput($name) || !validateInput($max)) 
     {
         http_response_code(400);
-        echo createResponse('error', 'You have entered incorrect information.');
+        echo createResponses('error', 'You have entered incorrect information.');
         // saveRequest($_SERVER['REMOTE_ADDR'], null, 'register', 0, "Entered data did not meet requirements");
         exit;
     }
 
-    if (empty($name) or empty($max) or empty($password)) 
+    if (empty($name) or empty($max)) 
     {
         http_response_code(400);
-        echo createResponse('error', 'All fields are mandatory on the form.');
+        echo createResponses('error', 'All fields are mandatory on the form.');
         // saveRequest($_SERVER['REMOTE_ADDR'], null, 'register', 0, "All fields are mandatory on the form.");
         exit;
     }
-
-    echo createResponse(
+    http_response_code(200);
+    echo createResponses(
         'success',
-        'Budget successfully created.'
+        'Budget successfully created.',
+        [$data['max'], $data['name']]
     );
 
+    saveUserBudget($data['name'], $data['max'], $_SESSION['userId'],);
     
 
 } else { 
-    http_response_code();
-    echo createResponse(
+    http_response_code(500); // check this
+    echo createResponses(
         'error',
-        'Budget was not added, please contact the website owner'
+        'Budget was not added, data has not been received'
     );
+    exit;
 }
 
 function saveUserBudget($name, $max, $userId)

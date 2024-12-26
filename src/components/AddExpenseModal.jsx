@@ -44,18 +44,19 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
         //! Currently working on this http request ------------------------------------------------------------------------------------
         
         if(!validateMaxInput(amountRef.current.value)) {
-            setError("Invalid Budget Max format, ensure this is a number")
+            setError("Invalid Expense Amount format, ensure this is a number")
             return
         }
         if(!validateExpenseDescription(descriptionRef.current.value)) {
-            setError("Invalid Budget Name format")
+            setError("Invalid Expense Name format")
             return
         }
           axios
-              .post("https://localhost/budget-api/update_expense.php", {
+              .post("/budget-api/update_expenses.php", {
                   description: descriptionRef.current.value,
-                  amount: parseFloat(amountRef.current.value)
-                  // budgetName??
+                  amount: parseFloat(amountRef.current.value),
+                  budget_id: budgetIdRef.current.value
+                  // budgetId which is already received in BudgetsContext??
               }, {
                   headers: {
                       'Content-Type': 'application/json'
@@ -63,14 +64,14 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
               })
               .then((response) => {
                   if(response.data.status === "success") {
-                      setSuccess('Budget has been added successfully')
-                      handleClose()
+                      setSuccess('Expense has been added successfully')
+                      // handleClose()
                   } else {
-                      setError(response.data.message || 'Budget not added 😑');
+                      setError(response.data.message || 'Expense not added 😑');
                   }
               })
               .catch((error) => {
-                  console.error('Budget not added due to: ', error);
+                  console.error('Expense not added due to: ', error);
                   // have made changes here 13/12/2024
                   if(error.response) {
                     setError(error.response.data.message || 'An error occurred')
@@ -133,7 +134,7 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
           {/* ------------------------------------------------------------ */}
           <Form.Group className="mb-3" controlId="budgetId">
             <Form.Label>Which budget is this for?</Form.Label>
-            {/* once we know what budgets the user has they can be mapped in the below Select */}
+            
             <Form.Select 
               defaultValue={ defaultBudgetId }
               ref={ budgetIdRef }
@@ -141,7 +142,9 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
             >
                 <option id={UNCATEGORISED_BUDGET_ID}>Uncategorised</option>
                 {budgets.map((budget) => (
-                    <option key={budget.id} value={budget.id}>
+                    <option 
+                      key={budget.id} 
+                      value={budget.id}>
                         {budget.name}
                     </option>
                 ))}  
