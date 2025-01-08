@@ -2,7 +2,6 @@ import { Modal, Form, Button, CloseButton } from "react-bootstrap";
 import { useRef } from "react"; //* We want to track the form values name and max 
 import { UNCATEGORISED_BUDGET_ID, useBudgets } from "../contexts/BudgetsContext";
 import { useState } from "react";
-import axios from "axios";
 
 
 export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) {
@@ -10,8 +9,12 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
     const amountRef = useRef(0)
     const budgetIdRef = useRef()
     const { addExpense, budgets } = useBudgets()
+    
+    // state for feedback on user input
+    const [error, setError] = useState('')
+    const [success, setSuccess] = useState('')
 
-    function validateMaxInput(input) {
+    function validateAmountInput(input) {
         const sanitizedInput = input.trim();
         return sanitizedInput.length <= 10 && 
         /^(\d{1,10})?(\.\d{2})?$/.test(sanitizedInput);
@@ -26,24 +29,42 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
                safeInputRegex.test(sanitizedInput);
     }
 
-    // state for feedback on user input
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
+    const handleAddExpense = async () => {
+      try {
+        const response = await addExpense(
+          descriptionRef.current.value,
+          parseFloat(amountRef.current.value),
+          budgetIdRef.current.value
+        )
+        
+
+        setSuccess(`${response} Expense added successfully`)
+        setTimeout(() => {
+            handleClose()
+            setSuccess("")
+            if(descriptionRef.current) descriptionRef.current.value = ""
+            if(amountRef.current) amountRef.current.value = 0
+            if(budgetIdRef.current) budgetIdRef.current.value = defaultBudgetId
+        }, 2000)
+                  
+      } catch (err) {
+          setError(err.message || "Failed to add Expense")
+      }
+    }
     
   //!  -------------------------------------------------------------------------------------------------------------------------------------
 
     function handleSubmit(e) {  
         e.preventDefault()
-        
-        addExpense({
-             description: descriptionRef.current.value,
-             amount: parseFloat(amountRef.current.value)
-        })
-        // handleClose()
+        e.stopPropagation()
+        // addExpense({
+        //      description: descriptionRef.current.value,
+        //      amount: parseFloat(amountRef.current.value)
+        // })
 
         //! Currently working on this http request ------------------------------------------------------------------------------------
         
-        if(!validateMaxInput(amountRef.current.value)) {
+        if(!validateAmountInput(amountRef.current.value)) {
             setError("Invalid Expense Amount format, ensure this is a number")
             return
         }
@@ -51,37 +72,8 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
             setError("Invalid Expense Name format")
             return
         }
-          axios
-              .post("/budget-api/update_expenses.php", {
-                  description: descriptionRef.current.value,
-                  amount: parseFloat(amountRef.current.value),
-                  budget_id: budgetIdRef.current.value
-                  // budgetId which is already received in BudgetsContext??
-              }, {
-                  headers: {
-                      'Content-Type': 'application/json'
-                  }
-              })
-              .then((response) => {
-                  if(response.data.status === "success") {
-                      setSuccess('Expense has been added successfully')
-                      // handleClose()
-                  } else {
-                      setError(response.data.message || 'Expense not added 😑');
-                  }
-              })
-              .catch((error) => {
-                  console.error('Expense not added due to: ', error);
-                  // have made changes here 13/12/2024
-                  if(error.response) {
-                    setError(error.response.data.message || 'An error occurred')
-                  } 
-                  else if(error.request) {
-                    setError('No response received from the server')
-                  } else {
-                    setError('Error setting up the request')
-                  }
-              })
+
+        handleAddExpense()
     }
 
   return (

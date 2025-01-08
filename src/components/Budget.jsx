@@ -2,7 +2,7 @@ import { Button, Card, ProgressBar, Stack } from "react-bootstrap";
 import { currencyFormatter } from "./utils";
 
 
-export default function Budget({ name, amount, max, onAddExpenseClick }) {
+export default function Budget({ name, amount, max, onAddExpenseClick, hideButtons, onViewExpensesClick }) {
     return (
         <Card>
             <Card.Body>
@@ -12,23 +12,28 @@ export default function Budget({ name, amount, max, onAddExpenseClick }) {
                     <div></div>
                     <div className="d-flex align-items-baseline ">
                         {currencyFormatter.format(amount)}
-                        <span className="text-muted fs-6 ms-1"> 
+                        {max && <span className="text-muted fs-6 ms-1"> 
                             / {currencyFormatter.format(max)}
-                        </span>
+                        </span>}
                     </div>
                 </Card.Title>
-                <ProgressBar 
+                {max && ( <ProgressBar 
                     animated 
                     className="rounded-pill" 
                     variant={getProgressBarVariant(amount, max)} /* change bar color dependant on budget values */
                     min={0}
                     max={max}
                     now={amount}
-                /> 
-                <Stack direction="horizontal" gap="2" className="mt-4">
+                />)} 
+                {!hideButtons && <Stack direction="horizontal" gap="2" className="mt-4">
                     <Button variant="outline-primary" className="ms-auto" onClick={onAddExpenseClick}>Add Expense</Button>
-                    <Button variant="outline-light">View Expenses</Button>
-                </Stack>
+                    <Button 
+                    onClick={onViewExpensesClick} 
+                    variant="outline-light" 
+                    >
+                        View Expenses
+                    </Button>
+                </Stack>}
             </Card.Body>
         </Card>
     )

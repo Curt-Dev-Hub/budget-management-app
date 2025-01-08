@@ -42,7 +42,7 @@ const router = createBrowserRouter([
   },
   {
     path: "edit-budget",
-    element: <ErrorBoundary><Budget_Edit/></ErrorBoundary>
+    element: (<ErrorBoundary><PrivateRoute component={ Budget_Edit } /></ErrorBoundary>)
   },
   {
     path: "learn-more-about-personal-budgeting",

@@ -31,6 +31,7 @@ const Header = () => {
                             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                             <NavDropdown.Item href="/edit-budget">Edit Budget Test</NavDropdown.Item>
                             <NavDropdown.Item href="/learn-more-about-personal-budgeting">Learn More</NavDropdown.Item>
+                            <NavDropdown.Item target='_blank' href="https://devcurt.me/calculator.html">Online Calculator</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item onClick={ logout } href="#action/3.4">Logout</NavDropdown.Item>
                             </NavDropdown>

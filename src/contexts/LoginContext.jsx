@@ -123,7 +123,8 @@ export const LoginProvider = ({ children }) => {
         setLoginStatus,
         logout,
         checkSession,
-        isLoading
+        isLoading,
+        setIsLoading
     }}>{ children }</LoginContext.Provider>
 }    
 
