@@ -34,7 +34,7 @@ body {
 }
 
 /* styling for form links */
-.form-link {
+.form-link, .policy-link {
   color: #FFD700;
   text-decoration: none;
   font-weight: bold;
@@ -42,7 +42,7 @@ body {
   border-bottom: 2px solid transparent;
 }
 
-.form-link:hover {
+.form-link:hover, .policy-link:hover {
   color: #FFA500; 
   border-bottom: 2px solid #FFA500; 
 }

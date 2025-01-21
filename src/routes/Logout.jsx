@@ -12,10 +12,10 @@ const Logout = () => {
       <Container>
         <Card style={{ boxShadow: "10px 8px 15px" }}>
           <Card.Body id="yellow-gradient3" style={{ textAlign: "center" }}>
-            <Card.Title>Thanks for using BudgetMaster! 😊</Card.Title>
+            <Card.Title>Thanks for using PennyWiser! 😊</Card.Title>
             <Card.Text style={{ textAlign: "center" }}>{ message }</Card.Text>
             <Button style={{ textAlign: "center" }} variant="primary" href="/">
-              Return To Home
+              Return To Homepage
             </Button>
           </Card.Body>
         </Card>

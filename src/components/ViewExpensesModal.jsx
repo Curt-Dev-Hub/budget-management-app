@@ -27,9 +27,9 @@ export default function ViewExpensesModal({show, handleClose, budgetId}) {
         }
     }
 
-    const handleDeleteExpense = async (expense) => {
+    const handleDeleteExpense = async (expense, budget_id) => {
         try {
-            await deleteExpense(expense)
+            await deleteExpense(expense, budget_id)
             setSuccess("Expense deleted successfully")
             setTimeout(() => setSuccess(""), 2000)
         } catch (err) {
@@ -49,7 +49,7 @@ export default function ViewExpensesModal({show, handleClose, budgetId}) {
                                 variant="outline-danger"
                                 onClick={() => handleDeleteBudget(budget)}
                             >    
-                                Delete
+                                Delete This Budget
                             </Button>
                         )}
                     </Stack>    
@@ -88,7 +88,7 @@ export default function ViewExpensesModal({show, handleClose, budgetId}) {
                             <Button 
                                 size="sm" 
                                 variant="outline-danger" 
-                                onClick={() =>  handleDeleteExpense(expense.id)}
+                                onClick={() =>  handleDeleteExpense(expense.id, expense.budget_id)}
                             >
                                 &times;
                             </Button>

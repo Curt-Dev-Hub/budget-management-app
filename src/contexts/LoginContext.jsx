@@ -77,7 +77,8 @@ export const LoginProvider = ({ children }) => {
     const checkSession = async () => {
         try {
             const response = await axios.get('/budget-api/includes/session.inc.php', {
-                withCredentials: true
+                withCredentials: true,
+                timeout: 5000
             });
             const parsedData = parseResponse(response.data)
             setName(parsedData.data.name || "Generic")

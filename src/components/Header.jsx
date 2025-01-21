@@ -8,7 +8,8 @@ import './Header.css';
 
 
 const Header = () => {
-    const {logout} = useContext(LoginContext)
+    const {logout, loginStatus} = useContext(LoginContext)
+    console.log(loginStatus)
     return (
         <>
             <Navbar id='top-nav-style' expand="lg" className="bg-body-tertiary" style={{ backgroundColor: "rgba(39, 133, 227, 0.54)" }}>
@@ -25,15 +26,15 @@ const Header = () => {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="/lesley">Error-Test</Nav.Link>
-                            <Nav.Link href="dashboard">Dashboard</Nav.Link>
-                            <Nav.Link href="login">Login</Nav.Link>
+                            {loginStatus && <Nav.Link href="dashboard">Dashboard</Nav.Link>} {/* dependant on logged in status*/ }
+                            <Nav.Link href="login">Login/Register</Nav.Link>
+                            <Nav.Link href="privacy-policy">Privacy Policy</Nav.Link>
                             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="/edit-budget">Edit Budget Test</NavDropdown.Item>
+                            {loginStatus && <NavDropdown.Item href="/edit-budget">Edit Budgets</NavDropdown.Item>} {/* dependant on logged in status*/ }
                             <NavDropdown.Item href="/learn-more-about-personal-budgeting">Learn More</NavDropdown.Item>
                             <NavDropdown.Item target='_blank' href="https://devcurt.me/calculator.html">Online Calculator</NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item onClick={ logout } href="#action/3.4">Logout</NavDropdown.Item>
+                            {loginStatus && <NavDropdown.Item onClick={ logout } >Logout</NavDropdown.Item>} {/* dependant on logged in status*/ }
                             </NavDropdown>
                         </Nav>
                         </Navbar.Collapse>

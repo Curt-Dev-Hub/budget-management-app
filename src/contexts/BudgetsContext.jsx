@@ -129,21 +129,25 @@ export const BudgetsProvider = ({ children }) => {
                   { id: uuidV4(), budget_id, amount, description },
                 ]
             })
-            checkExpenses()
+           await checkExpenses() //! testing 13/01/2025 added await keyword
           return response.data.status;
             
         } else {
-          return response.data.message || "Expense not added 😑";
+        //   return  response.data.message || "Expense not added 😑";
+            throw new Error(response.data.message || "Expense not added 😑");
         }
       } catch (error) {
         console.error("Expense not added due to: ", error);
         // have made changes here 13/12/2024
         if (error.response) {
-          return error.response.data.message || "An error occurred";
+        //   return error.response.data.message || "An error occurred";
+            throw new Error(error.response.data.message || "An error occurred")
         } else if (error.request) {
-          return "No response received from the server";
+        //   return "No response received from the server";
+            throw new Error("No response received from the server")
         } else {
-          return "Error setting up the request";
+        //   return "Error setting up the request";
+            throw new Error("Error setting up the request")
         }
       } finally {
         setIsLoading(false);
@@ -191,11 +195,11 @@ export const BudgetsProvider = ({ children }) => {
             }
     }
     
-    const  deleteExpense = async (id) => {
+    const  deleteExpense = async (id, budgetId) => {
         try {
             setIsLoading(true)
             const response = await axios.delete('/budget-api/update_expenses.php', {
-                data: { id },
+                data: { id, budgetId },
                 withCredentials: true
             }, {
                 headers: {

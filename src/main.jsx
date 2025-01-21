@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Learn_More from './routes/Learn_More.jsx';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
+import PrivacyPolicy from './routes/PrivacyPolicy.jsx';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <ErrorBoundary><Login /></ErrorBoundary>
+  },
+  {
+    path: "privacy-policy",
+    element: <ErrorBoundary><PrivacyPolicy/></ErrorBoundary>
   },
   {
     path: "register",

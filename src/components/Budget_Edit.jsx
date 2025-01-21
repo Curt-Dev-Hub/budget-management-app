@@ -33,7 +33,10 @@ const Budget_Edit = () => {
     return (
         <Container className="my-4">
             <AddBudgetModal show={ showAddBudgetModal } handleClose={() => setShowAddBudgetModal(false)} />
-            <AddExpenseModal show={ showAddExpenseModal } defaultBudgetId={addExpenseModalBudgetId} handleClose={() => setShowAddExpenseModal(false)} />  
+            <AddExpenseModal show={ showAddExpenseModal } defaultBudgetId={addExpenseModalBudgetId} handleClose={ () => {
+                if(!error) { setShowAddExpenseModal(false) } 
+                }
+            } />  
             <ViewExpensesModal 
                 show={showViewExpensesModal} 
                 budgetId={viewExpensesModalBudgetId} 
@@ -43,7 +46,7 @@ const Budget_Edit = () => {
                 }} 
             />
             <Stack id="edit-budget-container" direction="horizontal" gap={2} className="mb-4">
-                <h2 className="me-auto">Edit your monthly Budgets</h2>
+                <h2 className="me-auto">Edit your Budgets and Expenses</h2>
                 <Button variant="primary" onClick={() => setShowAddBudgetModal(true) }>Add A Budget</Button> 
                 <Button variant="outline-primary" onClick={openAddExpenseModal}>Add Expense</Button>
                 <div

@@ -5,7 +5,9 @@ import { useState } from "react";
 
 
 export default function AddBudgetModal({ show, handleClose }) {
-
+  // state for feedback on user input
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const nameRef = useRef("")
   const maxRef = useRef(0)
   const { addBudget } = useBudgets()
@@ -25,10 +27,6 @@ export default function AddBudgetModal({ show, handleClose }) {
               safeInputRegex.test(sanitizedInput);
   }
 
-  // state for feedback on user input
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-    
 
   const handleAddBudget = async () => {
     try {

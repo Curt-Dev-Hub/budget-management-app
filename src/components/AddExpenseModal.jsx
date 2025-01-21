@@ -1,19 +1,33 @@
 import { Modal, Form, Button, CloseButton } from "react-bootstrap";
-import { useRef } from "react"; //* We want to track the form values name and max 
+import { useRef, useEffect, useState } from "react"; //* We want to track the form values name and max 
 import { UNCATEGORISED_BUDGET_ID, useBudgets } from "../contexts/BudgetsContext";
-import { useState } from "react";
 
 
 export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) {
     const descriptionRef = useRef("")
     const amountRef = useRef(0)
     const budgetIdRef = useRef()
+    const [error, setError] = useState('') // state for feedback on user input
+    const [success, setSuccess] = useState('') // state for feedback on user input
     const { addExpense, budgets } = useBudgets()
-    
-    // state for feedback on user input
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
 
+    useEffect(() => { //! testing
+        let timeoutId;
+        if(success) {
+          timeoutId = setTimeout(() => {
+            handleClose()
+            setSuccess("")
+            if(descriptionRef.current) descriptionRef.current.value = ""
+            if(amountRef.current) amountRef.current.value = 0
+            if(budgetIdRef.current) budgetIdRef.current.value = defaultBudgetId
+          }, 2000)
+        }
+        return () => { 
+          clearTimeout(timeoutId)
+        }
+    }, [success, handleClose, defaultBudgetId])
+    
+    
     function validateAmountInput(input) {
         const sanitizedInput = input.trim();
         return sanitizedInput.length <= 10 && 
@@ -37,18 +51,20 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
           budgetIdRef.current.value
         )
         
-
         setSuccess(`${response} Expense added successfully`)
-        setTimeout(() => {
-            handleClose()
-            setSuccess("")
-            if(descriptionRef.current) descriptionRef.current.value = ""
-            if(amountRef.current) amountRef.current.value = 0
-            if(budgetIdRef.current) budgetIdRef.current.value = defaultBudgetId
-        }, 2000)
+        setError("") //! testing
+
+        // setTimeout(() => { //! testing
+        //     handleClose()
+        //     setSuccess("")
+        //     if(descriptionRef.current) descriptionRef.current.value = ""
+        //     if(amountRef.current) amountRef.current.value = 0
+        //     if(budgetIdRef.current) budgetIdRef.current.value = defaultBudgetId
+        // }, 2000)
                   
       } catch (err) {
           setError(err.message || "Failed to add Expense")
+          setSuccess("") //! testing
       }
     }
     
@@ -57,19 +73,14 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
     function handleSubmit(e) {  
         e.preventDefault()
         e.stopPropagation()
-        // addExpense({
-        //      description: descriptionRef.current.value,
-        //      amount: parseFloat(amountRef.current.value)
-        // })
 
-        //! Currently working on this http request ------------------------------------------------------------------------------------
         
         if(!validateAmountInput(amountRef.current.value)) {
             setError("Invalid Expense Amount format, ensure this is a number")
             return
         }
         if(!validateExpenseDescription(descriptionRef.current.value)) {
-            setError("Invalid Expense Name format")
+            setError("Invalid Expense Description format")
             return
         }
 

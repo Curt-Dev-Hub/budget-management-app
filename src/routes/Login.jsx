@@ -21,6 +21,10 @@ function Login() {
             .post("http://localhost/budget-api/login.php", {
                 username: userNameRef.current.value,
                 password: passwordRef.current.value
+            },
+            {
+              timeout: 5000,
+              timeoutErrorMessage: "No response from MySQL"
             }, 
             {
                 headers: {
