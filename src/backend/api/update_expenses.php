@@ -4,6 +4,7 @@ include 'config/dbconfig.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 session_start();
 
@@ -23,7 +24,7 @@ function createResponses($status, $message, $data = [])
 if (!isset($_SESSION['userId'], $_SESSION['loggedIn']))
 {
     http_response_code(401);
-    echo createResponses("error", "You must be logged in to access this feature"); //! Need to check this - potential security issue
+    echo createResponses("error", "You must be logged in to access this feature"); 
     exit;
 }
 
@@ -43,8 +44,6 @@ function validateInput($input)
 
     return true;
 }
-
-
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') 
@@ -86,10 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
             [$data['amount'], $data['description'], $data['budget_id']]
         );
 
-        //TODO: Need to pass in budgetId
         saveUserExpense($data['budget_id'], $data['description'], $data['amount'], $_SESSION['userId'],);
     } else {
-        http_response_code(500); // check this
+        http_response_code(500); 
         echo createResponses(
             'error',
             'Expense was not added, data has not been received'
@@ -98,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     }
 }
 
-// currently testing
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') 
 {
@@ -107,8 +104,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE')
     if ($data) 
     {
         $expenseId = isset($data['id']) ? $data['id'] : '';
+        $budgetId = isset($data['budgetId']) ? $data['budgetId'] : '';
 
-        if (!$data || empty($data['id'])) 
+        if (!$data || empty($data['id']) || empty($data['budgetId'])) 
         {
             http_response_code(400);
             echo createResponses('error', 'Missing required fields.', []);
@@ -116,14 +114,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE')
         }
 
         $expenseId = $data['id'];
+        $budgetId = $data['budgetId'];
 
-        if (!validateInput($expenseId)) 
+        if (!validateInput($expenseId) && !validateInput($budgetId)) 
         {
             http_response_code(400);
             echo createResponses('error', 'You have entered incorrect information.');
             // saveRequest($_SERVER['REMOTE_ADDR'], null, 'register', 0, "Entered data did not meet requirements");
             exit;
         }
+
+        deleteExpense($expenseId, $budgetId);
 
         http_response_code(200);
         echo createResponses(
@@ -132,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE')
             [$data['id']]
         );
 
-        deleteExpense($data['id']);
+        
     } else {
         http_response_code(500); // check this
         echo createResponses(
@@ -148,18 +149,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE')
 function saveUserExpense($budgetId, $description, $amount, $userId)
 {
     global $connection;
-    $query = $connection->prepare("INSERT INTO expenses(budget_id, description, amount, user_id)
-    VALUES(?,?,?,?)");
-    $query->bind_param("isdi", $budgetId, $description, $amount, $userId);
-    $query->execute();
+
+    try {
+        $connection->begin_transaction();
+        $query1 = $connection->prepare("INSERT INTO expenses(budget_id, description, amount, user_id)
+        VALUES(?,?,?,?)");
+        $query1->bind_param("isdi", $budgetId, $description, $amount, $userId);
+        $query1->execute();
+
+        $query2 = $connection->prepare("UPDATE budgets SET updated_at = NOW() WHERE id = ?");
+        $query2->bind_param("i", $budgetId);
+        $query2->execute();
+    } catch (Exception $e) {
+        $connection->rollback();
+        throw $e;
+    } finally {
+        if (isset($query1)) $query1->close();
+        if (isset($query2)) $query2->close();
+    }
 }
 
 //TODO: Need to add delete functionality
-function deleteExpense($expenseId)
+function deleteExpense($expenseId, $budgetId)
 {
     global $connection;
-    $query = $connection->prepare("DELETE FROM expenses WHERE id = ?");
-    $query->bind_param("i", $expenseId);
-    $query->execute();
+
+    try {
+        $connection->begin_transaction();
+        $query1 = $connection->prepare("DELETE FROM expenses WHERE id = ?");
+        $query1->bind_param("i", $expenseId);
+        $query1->execute();
+
+        $query2 = $connection->prepare("UPDATE budgets SET updated_at = NOW() WHERE id = ?");
+        $query2->bind_param("i", $budgetId);
+        $query2->execute();
+
+        $connection->commit();
+    } catch(Exception $e) {
+        $connection->rollback();
+        throw $e;
+    } finally {
+        if (isset($query1)) $query1->close();
+        if (isset($query2)) $query2->close();
+    }
 }
 

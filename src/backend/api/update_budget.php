@@ -22,7 +22,8 @@ function createResponses($status, $message, $data = [])
 
 if (!isset($_SESSION['userId'], $_SESSION['loggedIn']))
 {
-    echo createResponses("error", "You must be logged in to access this feature"); //! Need to check this - potential security issue
+    echo createResponses("error", "You must be logged in to access this feature"); 
+    throw new Exception("User not authenticated", 401);
     exit;
 }
 
@@ -43,26 +44,28 @@ function validateInput($input)
     return true;
 }
 
-
-
 $data = json_decode(file_get_contents('php://input'), true);
+
+if(!$data)
+{
+    http_response_code(400);
+    echo createResponses('error', 'Budget was not added, data has not been received');
+    exit;
+}
 
 
 if($data)
 {
-    $name = isset($data['name']) ? $data['name'] : '';
-    $max = isset($data['max']) ? $data['max'] : '';
+    $name = trim($data['name'] ?? '');
+    $max = $data['max'] ?? '';
 
-    if (!$data || empty($data['name']) || empty($data['max'])) 
+    if (empty($name) || empty($max)) 
     {
         http_response_code(400);
-        echo createResponses('error', 'Missing required fields.', []);
+        echo createResponses('error', 'All fields are mandatory on the form.',);
         exit;
     }
 
-    $name = trim($data['name']);
-    $max = $data['max'];
-    
     if (!validateInput($name) || !validateInput($max)) 
     {
         http_response_code(400);
@@ -71,38 +74,33 @@ if($data)
         exit;
     }
 
-    if (empty($name) or empty($max)) 
-    {
-        http_response_code(400);
-        echo createResponses('error', 'All fields are mandatory on the form.');
-        // saveRequest($_SERVER['REMOTE_ADDR'], null, 'register', 0, "All fields are mandatory on the form.");
+    try {
+        saveUserBudget($data['name'], $data['max'], $_SESSION['userId'],);
+        http_response_code(200);
+        echo createResponses(
+            'success',
+            'Budget successfully created.',
+            [$data['max'], $data['name']]
+        );
         exit;
+    } catch(Exception $e) {
+        $code = $e->getCode() ?: 500;
+        http_response_code($code);
+        echo createResponse('error', $e->getMessage());
     }
-    http_response_code(200);
-    echo createResponses(
-        'success',
-        'Budget successfully created.',
-        [$data['max'], $data['name']]
-    );
-
-    saveUserBudget($data['name'], $data['max'], $_SESSION['userId'],);
-    
-
-} else { 
-    http_response_code(500); // check this
-    echo createResponses(
-        'error',
-        'Budget was not added, data has not been received'
-    );
-    exit;
 }
 
 function saveUserBudget($name, $max, $userId)
 {
     global $connection;
-    $query = $connection->prepare("INSERT INTO budgets(name, max, user_id)
-    VALUES(?,?,?)");
-    $query->bind_param("sdi", $name, $max, $userId);
-    $query->execute();
+    try {
+        $query = $connection->prepare("INSERT INTO budgets(name, max, user_id)
+        VALUES(?,?,?)");
+        $query->bind_param("sdi", $name, $max, $userId);
+        $query->execute();
+    } catch(Exception $e) {
+        error_log("Failed to save budget", $e->getMessage());
+        throw new Exception("Failed to save budget");
+    } 
 }
 
