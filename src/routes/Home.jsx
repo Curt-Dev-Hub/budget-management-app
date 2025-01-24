@@ -34,9 +34,12 @@ const Home = () => {
         <Row>
           <Col md={4}>
             <div className="feature-card">
-              <AiFillPoundCircle size={32}  />
-              <h5>Expense Tracking</h5>
-              <p>
+              <AiFillPoundCircle 
+                className='feature-icon'
+                size={40}  
+              />
+              <h5 className='feature-heading'>Expense Tracking</h5>
+              <p className='feature-para'>
                 Effortlessly track your spending with detailed categories and
                 insightful reports.
               </p>
@@ -44,9 +47,12 @@ const Home = () => {
           </Col>
           <Col md={4}>
             <div className="feature-card">
-              <BsPieChartFill size={32} className="feature-icon" />
-              <h5>Budget Planning</h5>
-              <p>
+              <BsPieChartFill  
+                size={40} 
+                className="feature-icon" 
+              />
+              <h5 className='feature-heading'>Budget Planning</h5>
+              <p className='feature-para'>
                 Create and manage budgets for different categories to stay on
                 track with your financial goals.
               </p>
@@ -54,9 +60,12 @@ const Home = () => {
           </Col>
           <Col md={4}>
             <div className="feature-card">
-              <MdSavings size={32} className="feature-icon" />
-              <h5>Savings Goals</h5>
-              <p>
+              <MdSavings 
+                size={40} 
+                className="feature-icon" 
+              />
+              <h5 className='feature-heading'>Savings Goals</h5>
+              <p className='feature-para'>
                 Set savings goals, track your progress, and achieve your
                 financial dreams.
               </p>
@@ -67,7 +76,7 @@ const Home = () => {
           <Card.Header>Effortlessly Track Your Finances</Card.Header>
           <Card.Body id="yellow-gradient1">
             <Card.Title>Keep Track Of Incomings and Outgoings</Card.Title>
-            <Card.Text style={{ textAlign: "center" }}>
+            <Card.Text className='p-4' id='cta-card-text' style={{ textAlign: "center", margin: "0 auto" }}>
               {" "}
               {/* style here is to override style from Learn component for now */}
               <b>PennyWiser</b> makes it easy to understand where your money is

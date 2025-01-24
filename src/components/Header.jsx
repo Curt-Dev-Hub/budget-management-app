@@ -9,7 +9,7 @@ import './Header.css';
 
 const Header = () => {
     const {logout, loginStatus} = useContext(LoginContext)
-    console.log(loginStatus)
+    
     return (
         <>
             <Navbar id='top-nav-style' expand="lg" className="bg-body-tertiary" style={{ backgroundColor: "rgba(39, 133, 227, 0.54)" }}>
