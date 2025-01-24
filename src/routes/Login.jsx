@@ -51,42 +51,46 @@ function Login() {
     }
 
     return (
-      <div className="login_register_container">
-        <Form className="login_register_form" onSubmit={handleSubmit}>
-          {errorMessage && (
-            <div className="alert alert-danger" role="alert">
-              {errorMessage}
-            </div>
-          )}
-          <Form.Group className="login_register" controlId="username">
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              ref={userNameRef}
-              type="text"
-              placeholder="Your username"
-              required
-            />
-          </Form.Group>
-          <br />
-          <Form.Group>
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              ref={passwordRef}
-              type="password"
-              placeholder="Your password"
-              required
-            />
-          </Form.Group>
-          <Button as="input" type="submit" value="Login" />{" "}
-          <p>
-            Not yet a member?{" "}
-            <a className="form-link" href="register">
-              Register Here
-            </a>
-          </p>
-        </Form>
-      </div>
+      <>
+        <h1 style={{paddingLeft: "15px"}}>Login</h1>
+        <div className="login_register_container">
+          <Form className="login_register_form" onSubmit={handleSubmit}>
+            {errorMessage && (
+              <div className="alert alert-danger" role="alert">
+                {errorMessage}
+              </div>
+            )}
+            <Form.Group className="login_register" controlId="username">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                ref={userNameRef}
+                type="text"
+                placeholder="Your username"
+                required
+              />
+            </Form.Group>
+            <br />
+            <Form.Group>
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                ref={passwordRef}
+                type="password"
+                placeholder="Your password"
+                required
+              />
+            </Form.Group>
+            <Button as="input" type="submit" value="Login" />{" "}
+            <p>
+              Not yet a member?{" "}
+              <a className="form-link" href="register">
+                Register Here
+              </a>
+            </p>
+          </Form>
+        </div>
+      </>
     );
+    
 }
 
 export default Login;

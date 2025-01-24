@@ -3,6 +3,7 @@
     justify-content: center;
     align-items: center;
     font-family:'Open Sans Condensed', sans-serif;
+    height: 75vh;
 }
 
 .login_register_form {

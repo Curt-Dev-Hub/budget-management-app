@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap"
 function PrivacyPolicy() {
   return (
     <>
-      <h1 style={{ textAlign: 'center'}}>Privacy Policy</h1>
+      <h1 style={{paddingLeft: "15px"}}>Privacy Policy</h1>
       <Card bg="primary" text="light" style={{ width: '90%', margin: '43px auto' }}>
         <Card.Body>
           {/* <Card.Title>Privacy Policy</Card.Title> */}
