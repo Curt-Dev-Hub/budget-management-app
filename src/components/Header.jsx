@@ -27,10 +27,10 @@ const Header = () => {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             {loginStatus && <Nav.Link href="dashboard">Dashboard</Nav.Link>} {/* dependant on logged in status*/ }
-                            <Nav.Link href="login">Login/Register</Nav.Link>
+                            {!loginStatus && <Nav.Link href="login">Login/Register</Nav.Link>}
                             <Nav.Link href="privacy-policy">Privacy Policy</Nav.Link>
-                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                            {loginStatus && <NavDropdown.Item href="/edit-budget">Edit Budgets</NavDropdown.Item>} {/* dependant on logged in status*/ }
+                            {loginStatus && <Nav.Link href="/edit-budget">Edit Budgets</Nav.Link>}
+                            <NavDropdown title="More" id="basic-nav-dropdown">
                             <NavDropdown.Item href="/learn-more-about-personal-budgeting">Learn More</NavDropdown.Item>
                             <NavDropdown.Item target='_blank' href="https://devcurt.me/calculator.html">Online Calculator</NavDropdown.Item>
                             <NavDropdown.Divider />

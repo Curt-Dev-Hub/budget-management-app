@@ -3,10 +3,9 @@ import { Card } from "react-bootstrap"
 function PrivacyPolicy() {
   return (
     <>
-      <h1 style={{paddingLeft: "15px"}}>Privacy Policy</h1>
+      <h1 className="mt-4" style={{paddingLeft: "15px"}}>Privacy Policy</h1>
       <Card bg="primary" text="light" style={{ width: '90%', margin: '43px auto' }}>
         <Card.Body>
-          {/* <Card.Title>Privacy Policy</Card.Title> */}
           <Card.Text>
             This privacy policy is provided in a layered format so you can click through to the specific areas set out below.
           </Card.Text>
@@ -27,8 +26,7 @@ function PrivacyPolicy() {
             <b>Contact Details</b>
             <br /> <br />
             Full name of legal entity: Curtis King<br />
-            Email address: curt_king@coolsite.net<br />
-            Telephone number: 07507 465777 <br/> <br />
+            Email address: curt_king@coolsite.net<br /> <br />
             
             You have the right to make a complaint at any time to the Information Commissioners Office (ICO), 
             the UK supervisory authority for data protection issues (www.ico.org.uk). I would, however, appreciate the chance to deal with your 

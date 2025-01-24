@@ -4,7 +4,7 @@ import { currencyFormatter } from "./utils";
 
 export default function Budget({ name, amount, max, onAddExpenseClick, hideButtons, onViewExpensesClick }) {
     return (
-        <Card>
+        <Card style={{ backgroundColor: "cyan"}}>
             <Card.Body>
                 <Card.Title className="d-flex justify-content-between-align-items-baseline
                 fw-normal mb-3">
@@ -26,10 +26,16 @@ export default function Budget({ name, amount, max, onAddExpenseClick, hideButto
                     now={amount}
                 />)} 
                 {!hideButtons && <Stack direction="horizontal" gap="2" className="mt-4">
-                    <Button variant="outline-primary" className="ms-auto" onClick={onAddExpenseClick}>Add Expense</Button>
                     <Button 
-                    onClick={onViewExpensesClick} 
-                    variant="outline-light" 
+                        variant="dark" 
+                        className="ms-auto" 
+                        onClick={ onAddExpenseClick }
+                    >
+                            Add Expense
+                    </Button>
+                    <Button 
+                        onClick={onViewExpensesClick} 
+                        variant="primary" 
                     >
                         View Expenses
                     </Button>
