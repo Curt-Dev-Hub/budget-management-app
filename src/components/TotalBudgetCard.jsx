@@ -1,6 +1,5 @@
 import { useBudgets } from '../contexts/BudgetsContext'
 import Budget from './Budget';
-//! potentially implement some sort of state management to handle the total budget - as showing NaN new expense created
 
 
 export default function TotalBudgetCard() {

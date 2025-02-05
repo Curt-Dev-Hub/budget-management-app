@@ -48,49 +48,42 @@ function validateInput($input)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') 
 {
-    $data = json_decode(file_get_contents('php://input'), true);
+    try {
+        $data = json_decode(file_get_contents('php://input'), true);
 
-    if ($data) 
-    {
-        $description = isset($data['description']) ? $data['description'] : '';
-        $amount = isset($data['amount']) ? $data['amount'] : '';
-        $budgetId = isset($data['budget_id']) ? $data['budget_id'] : '';
-
-        if (!$data || empty($data['description']) || empty($data['amount'])) 
+        if(!$data)
         {
-            http_response_code(400);
-            echo $data;
-            echo strval($data['description']);
-            echo strval($data['amount']);
-            echo createResponses('error', 'Missing required fields.', []);
-            exit;
+            throw new Exception("Expense was not added, data has not been received", 400);
+        }
+
+        if (empty($data['description']) || empty($data['amount']) || empty($data['budget_id'])) 
+        {
+            throw new Exception("Missing required fields", 400);
         }
 
         $description = trim($data['description']);
         $amount = $data['amount'];
+        $budgetId = $data['budget_id'];
 
-        if (!validateInput($description) || !validateInput($amount)) 
+        if(!validateInput($description) || !validateInput($amount) || !validateInput($budgetId)) 
         {
-            http_response_code(400);
-            echo createResponses('error', 'You have entered incorrect information.');
-            // saveRequest($_SERVER['REMOTE_ADDR'], null, 'register', 0, "Entered data did not meet requirements");
-            exit;
+            throw new Exception("You have entered incorrect information", 400);
         }
 
+        saveUserExpense($budgetId, $description, $amount, $_SESSION['userId'],);
 
         http_response_code(200);
         echo createResponses(
             'success',
             'Expense successfully created.',
-            [$data['amount'], $data['description'], $data['budget_id']]
-        );
-
-        saveUserExpense($data['budget_id'], $data['description'], $data['amount'], $_SESSION['userId'],);
-    } else {
-        http_response_code(500); 
+            [$budgetId, $description, $amount,]
+        );       
+    } catch (Exception $e) {
+        $code = $e->getCode() ?: 500;
+        http_response_code($code);
         echo createResponses(
             'error',
-            'Expense was not added, data has not been received'
+            $e->getMessage()
         );
         exit;
     }
@@ -99,29 +92,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') 
 {
-    $data = json_decode(file_get_contents('php://input'), true);
+    try {
+        $data = json_decode(file_get_contents('php://input'), true);
 
-    if ($data) 
-    {
-        $expenseId = isset($data['id']) ? $data['id'] : '';
-        $budgetId = isset($data['budgetId']) ? $data['budgetId'] : '';
-
-        if (!$data || empty($data['id']) || empty($data['budgetId'])) 
+        if (!$data) 
         {
-            http_response_code(400);
-            echo createResponses('error', 'Missing required fields.', []);
-            exit;
+            throw new Exception("Expense was not deleted, data has not been received", 400);
+        } 
+    
+        if (empty($data['id']) || empty($data['budgetId'])) 
+        {
+            throw new Exception("Missing required fields", 400);
         }
 
         $expenseId = $data['id'];
         $budgetId = $data['budgetId'];
 
-        if (!validateInput($expenseId) && !validateInput($budgetId)) 
+        if (!validateInput($expenseId) || !validateInput($budgetId)) 
         {
-            http_response_code(400);
-            echo createResponses('error', 'You have entered incorrect information.');
-            // saveRequest($_SERVER['REMOTE_ADDR'], null, 'register', 0, "Entered data did not meet requirements");
-            exit;
+            throw new Exception("You have entered incorrect information", 400);
         }
 
         deleteExpense($expenseId, $budgetId);
@@ -130,21 +119,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE')
         echo createResponses(
             'success',
             'Expense successfully deleted.',
-            [$data['id']]
+            [$expenseId]
         );
-
         
-    } else {
-        http_response_code(500); // check this
+    } catch (Exception $e) {
+        $code = $e->getCode() ?: 500;
+        http_response_code($code);
         echo createResponses(
             'error',
-            'Expense was not deleted, data has not been received'
+            $e->getMessage()
         );
         exit;
     }
 }
-
-
 
 function saveUserExpense($budgetId, $description, $amount, $userId)
 {
@@ -160,12 +147,14 @@ function saveUserExpense($budgetId, $description, $amount, $userId)
         $query2 = $connection->prepare("UPDATE budgets SET updated_at = NOW() WHERE id = ?");
         $query2->bind_param("i", $budgetId);
         $query2->execute();
+
+        $connection->commit();
     } catch (Exception $e) {
         $connection->rollback();
         throw $e;
     } finally {
-        if (isset($query1)) $query1->close();
-        if (isset($query2)) $query2->close();
+        if(isset($query1)) $query1->close();
+        if(isset($query2)) $query2->close();
     }
 }
 
@@ -189,8 +178,9 @@ function deleteExpense($expenseId, $budgetId)
         $connection->rollback();
         throw $e;
     } finally {
-        if (isset($query1)) $query1->close();
-        if (isset($query2)) $query2->close();
+        if(isset($query1)) $query1->close();
+        if(isset($query2)) $query2->close();
     }
+    
 }
 

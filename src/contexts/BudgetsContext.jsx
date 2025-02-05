@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from "react"
-import { v4 as uuidV4} from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import axios from "axios"
 import { useLoginStatus } from "./LoginContext"
 
@@ -13,12 +13,12 @@ export function useBudgets() {
 }
 
 export const BudgetsProvider = ({ children }) => {
-    const [budgets, setBudgets] = useState([])  // DONE: Now receiving budgets - Requires further testing
-    const [expenses, setExpenses] = useState([]) // DONE: Now receiving expenses - Requires further testing
+    const [budgets, setBudgets] = useState([]) 
+    const [expenses, setExpenses] = useState([]) 
     const { loginStatus, setIsLoading } = useLoginStatus()
-    const initialLoadComplete = useRef(false) //! testing
+    const initialLoadComplete = useRef(false)
 
-    // //! Initial data fetch test
+    // Initial data fetch test
     useEffect(() => {
         if(loginStatus && !initialLoadComplete.current) {
             const fetchInitialData = async () => {
@@ -40,7 +40,7 @@ export const BudgetsProvider = ({ children }) => {
 
     const checkBudgets = async () => {
         try {
-            setIsLoading(true); //! testing
+            setIsLoading(true);
             const response = await axios.get('/budget-api/check_budgets.php', {
                 withCredentials: true
             });
@@ -50,7 +50,6 @@ export const BudgetsProvider = ({ children }) => {
             } 
         } catch(error) {
             console.error('There was an error checking budgets: ', error)
-            
             } finally {
                 setIsLoading(false);
             }
@@ -59,7 +58,7 @@ export const BudgetsProvider = ({ children }) => {
 
     const checkExpenses = async () => {
         try {
-            setIsLoading(true); //! testing
+            setIsLoading(true); 
             const response = await axios.get('/budget-api/check_expenses.php', {
                 withCredentials: true
             });
@@ -105,7 +104,7 @@ export const BudgetsProvider = ({ children }) => {
 
 
     function getBudgetExpenses(budgetId) {
-        return expenses.filter(expense => expense.budget_id === budgetId) // returning an array of expenses whose budget_id matches the one passed in
+        return expenses.filter(expense => expense.budget_id === budgetId)
     }
 
 
@@ -129,24 +128,19 @@ export const BudgetsProvider = ({ children }) => {
                   { id: uuidV4(), budget_id, amount, description },
                 ]
             })
-           await checkExpenses() //! testing 13/01/2025 added await keyword
+           await checkExpenses() 
           return response.data.status;
             
         } else {
-        //   return  response.data.message || "Expense not added 😑";
             throw new Error(response.data.message || "Expense not added 😑");
         }
       } catch (error) {
         console.error("Expense not added due to: ", error);
-        // have made changes here 13/12/2024
         if (error.response) {
-        //   return error.response.data.message || "An error occurred";
             throw new Error(error.response.data.message || "An error occurred")
         } else if (error.request) {
-        //   return "No response received from the server";
             throw new Error("No response received from the server")
         } else {
-        //   return "Error setting up the request";
             throw new Error("Error setting up the request")
         }
       } finally {
@@ -160,35 +154,33 @@ export const BudgetsProvider = ({ children }) => {
         try {
             setIsLoading(true)
             const response = await axios.post('/budget-api/update_budget.php', 
-                { name, max}, 
-                { withCredentials: true }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            if(response.data.status === "success") {
-                //! testing - changes made here 31/12/2024
-                setBudgets(prevBudgets => {
-                if(prevBudgets.find(budget => budget.name === name )) {
-                    throw new Error("A budget with that name already exists")
-                }
-                return [...prevBudgets, { id: uuidV4(), name, max }]
-            })
-            await checkBudgets()
+                { name, max }, 
+                { 
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }     
+            );
+            
+            if(response.data.status === 'success') {
+                setBudgets((prevBudgets) => {
+                  const existingBudget = prevBudgets.find((budget) => budget.name === name);
+                  if(existingBudget) {
+                    throw new Error(response.data.message || 'Budget not added 😑')
+                  } else {
+                    return [...prevBudgets, { id: uuidV4(), name, max }];
+                  }
+                });
+
+            await checkBudgets();
             return { success: true, message: "Budget has been added successfully"}
-            } else {
-                return (response.data.message || 'Budget not added 😑');
+            } 
+            else { 
+                throw new Error(response.data.message || 'Budget not added 😑')
             }
         } catch(error) {
-                console.error('Budget not added due to: ', error)
-                if(error.response) {
-                    return error.response.data.message || 'An error occurred'
-                } 
-                else if(error.request) {
-                    return 'No response received from the server'
-                } else {
-                    return 'Error setting up the request'
-                }
+                throw new Error(error.response?.data?.message || error.message || 'Failed to add budget')
             }
             finally {
                 setIsLoading(false)
@@ -210,7 +202,7 @@ export const BudgetsProvider = ({ children }) => {
                 setExpenses(prevExpenses => {
                     return prevExpenses.filter(expense => expense.id !== id) 
                 })
-                await checkExpenses()
+                await checkExpenses();
                 return response.data.status
             } else {
                 throw new Error(response.data.message || "Failed to delete expense")
@@ -225,8 +217,6 @@ export const BudgetsProvider = ({ children }) => {
         }
     }
 
-  
-    //** */ the below passed down data will be required in child elements
     return <BudgetsContext.Provider value={{
         budgets,
         expenses,

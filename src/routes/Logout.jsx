@@ -8,8 +8,12 @@ const Logout = () => {
 
 
   return (
-    <>
-      <Container>
+      <Container style={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        height: "80vh"
+      }}>
         <Card style={{ boxShadow: "10px 8px 15px" }}>
           <Card.Body id="yellow-gradient3" style={{ textAlign: "center" }}>
             <Card.Title>Thanks for using PennyWiser! 😊</Card.Title>
@@ -20,7 +24,6 @@ const Logout = () => {
           </Card.Body>
         </Card>
       </Container>
-    </>
   );
 };
 

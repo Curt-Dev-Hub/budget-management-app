@@ -22,8 +22,8 @@ function createResponses($status, $message, $data = [])
 
 if (!isset($_SESSION['userId'], $_SESSION['loggedIn']))
 {
-    echo createResponses("error", "You must be logged in to access this feature"); 
-    throw new Exception("User not authenticated", 401);
+    http_response_code(401);
+    echo createResponses("error", "User not authenticated"); 
     exit;
 }
 
@@ -44,63 +44,185 @@ function validateInput($input)
     return true;
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
 
-if(!$data)
+if($_SERVER['REQUEST_METHOD'] === 'POST')
 {
-    http_response_code(400);
-    echo createResponses('error', 'Budget was not added, data has not been received');
-    exit;
-}
-
-
-if($data)
-{
-    $name = trim($data['name'] ?? '');
-    $max = $data['max'] ?? '';
-
-    if (empty($name) || empty($max)) 
-    {
-        http_response_code(400);
-        echo createResponses('error', 'All fields are mandatory on the form.',);
-        exit;
-    }
-
-    if (!validateInput($name) || !validateInput($max)) 
-    {
-        http_response_code(400);
-        echo createResponses('error', 'You have entered incorrect information.');
-        // saveRequest($_SERVER['REMOTE_ADDR'], null, 'register', 0, "Entered data did not meet requirements");
-        exit;
-    }
-
     try {
-        saveUserBudget($data['name'], $data['max'], $_SESSION['userId'],);
-        http_response_code(200);
-        echo createResponses(
-            'success',
-            'Budget successfully created.',
-            [$data['max'], $data['name']]
-        );
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if(!$data)
+        {
+            throw new Exception('Budget was not added, data has not been received', 400);
+        }
+
+        if(empty($data['name']) || empty($data['max'])) 
+        {
+            throw new Exception('All fields are mandatory on the form.', 400);
+        }
+
+        $name = trim($data['name']);
+        $max = $data['max'];
+
+        if(!validateInput($name) || !validateInput($max)) 
+        {
+            throw new Exception('You have entered incorrect information.', 400);
+        }
+
+        $result = saveUserBudget($name, $max, $_SESSION['userId']);
+        // saveUserBudget($name, $max, $_SESSION['userId']); Testing
+
+        http_response_code($result['code']);
+        echo $result['response'];
         exit;
+
     } catch(Exception $e) {
         $code = $e->getCode() ?: 500;
         http_response_code($code);
-        echo createResponse('error', $e->getMessage());
+        echo createResponses('error', $e->getMessage());
+        exit;
     }
 }
 
-function saveUserBudget($name, $max, $userId)
+
+function saveUserBudget($name, $max, $userId) {
+    global $connection;
+    $query = null;
+    
+    try {
+        // Input validation
+        if(empty($name) || !is_numeric($max) || !is_numeric($userId)) 
+        {
+            throw new Exception('Invalid input parameters', 400);
+        }
+
+        // Check connection
+        if(!$connection) 
+        {
+            error_log("Database connection failed", 0);
+            throw new Exception("Database connection failed", 500);
+        }
+
+        // check for duplicate entry
+        //! testing
+        $stmt = $connection->prepare("SELECT id FROM budgets WHERE name = ? AND user_id = ?");
+        $stmt->bind_param("si", $name, $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            // echo createResponses('error', "A budget with the name '$name' already exists");
+            throw new Exception("A budget with the name '$name' already exists", 409);
+        }
+
+        $query = $connection->prepare("INSERT INTO budgets(name, max, user_id) VALUES(?,?,?)");
+
+        if(!$query) 
+        {
+            throw new Exception("Query preparation failed", 500);
+        }
+
+        $query->bind_param("sdi", $name, $max, $userId);
+        
+        
+        if (!$query->execute()) 
+        {
+            throw new Exception("Query execution failed", 500);
+        }
+
+        $newBudgetId = $query->insert_id;
+        
+        return [
+            'status' => true,
+            'code' => 201,
+            'response' => createResponses('success', 'Budget created successfully', ['id' => $newBudgetId])
+        ];
+
+    } catch (Exception $e) {
+        // error handling for duplicate entry
+        if($query && $query->errno === 1062)
+        {
+            return [
+                'status' => false,
+                'code' => 409,
+                'response' => createResponses('error', 'Budget already exists'),
+            ];
+        }
+        $code = $e->getCode() ?: 500;
+        error_log("Database error: " . $e->getMessage());
+        
+        return [
+            'status' => false,
+            'code' => $code,
+            'response' => createResponses('error', $e->getMessage())
+        ];
+    } finally {
+        if(isset($query)) 
+        {
+            $query->close();
+        }
+    }
+}
+
+
+if($_SERVER['REQUEST_METHOD'] === 'DELETE')
+{
+    try {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if(!$data)
+        {
+            throw new Exception('Budget was not deleted, data has not been received', 400);
+        }
+
+        $budgetId = isset($data['id']) ?? '';
+        if(empty($data['id'])) 
+        {
+            throw new Exception('Missing required fields', 400);
+        }
+
+        $budgetId = $data['id'];
+
+        if (!validateInput($budgetId)) {
+            throw new Exception('Invalid budget ID format', 400);
+        }
+
+        deleteBudget($budgetId);
+        
+        http_response_code(200);
+        echo createResponses(
+            'success',
+            'Budget successfully deleted.',
+            [$budgetId]
+        );
+    } catch(Exception $e) {
+        $code = $e->getCode() ?: 500;
+        http_response_code($code);
+        echo createResponses('error', $e->getMessage());
+        exit;
+    }
+}
+
+function deleteBudget($budgetId)
 {
     global $connection;
+
     try {
-        $query = $connection->prepare("INSERT INTO budgets(name, max, user_id)
-        VALUES(?,?,?)");
-        $query->bind_param("sdi", $name, $max, $userId);
+        $connection->begin_transaction();
+
+        $query = $connection->prepare("DELETE FROM budgets WHERE id = ?");
+        $query->bind_param("i", $budgetId);
         $query->execute();
+
+        if($query->affected_rows === 0)
+        {
+            throw new Exception("Budget not found", 400);
+        }
+
+        $connection->commit();
     } catch(Exception $e) {
-        error_log("Failed to save budget", $e->getMessage());
-        throw new Exception("Failed to save budget");
-    } 
+        $connection->rollback();
+        error_log("Failed to delete budget", $e->getMessage());
+        throw new Exception("Failed to delete budget");
+    }
 }
 

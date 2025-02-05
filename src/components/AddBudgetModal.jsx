@@ -1,11 +1,11 @@
 import { Modal, Form, Button, CloseButton } from "react-bootstrap";
-import { useRef } from "react"; //* We want to track the form values name and max 
+import React, { useRef } from "react";
 import { useBudgets } from "../contexts/BudgetsContext";
 import { useState } from "react";
 
 
-export default function AddBudgetModal({ show, handleClose }) {
-  // state for feedback on user input
+function AddBudgetModal({ show, handleClose }) {
+  
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const nameRef = useRef("")
@@ -19,12 +19,12 @@ export default function AddBudgetModal({ show, handleClose }) {
   }
 
   function validateBudgetNameInput(input) {
-      const sanitizedInput = input.trim();
-      const safeInputRegex = /^[a-zA-Z0-9\s'-]+$/;
+    const sanitizedInput = input.trim();
+    const safeInputRegex = /^[a-zA-Z0-9\s'-]+$/;
 
-      return sanitizedInput.length >= 2 && 
-              sanitizedInput.length <= 50 && 
-              safeInputRegex.test(sanitizedInput);
+    return sanitizedInput.length >= 2 && 
+            sanitizedInput.length <= 50 && 
+            safeInputRegex.test(sanitizedInput);
   }
 
 
@@ -33,23 +33,22 @@ export default function AddBudgetModal({ show, handleClose }) {
       await addBudget({
         name: nameRef.current.value,
         max: parseFloat(maxRef.current.value)
-      })
+      }) 
         setSuccess("Budget added successfully")
-        setTimeout(() => {
-            handleClose()
-            setSuccess("")
-            nameRef.current.value = ""
-            maxRef.current.value = 0
-        }, 2000)
+        setTimeout(() => {() => handleClose()}, 3000) 
+        setSuccess("")
+        nameRef.current.value = ""
+        maxRef.current.value = 0  
     } catch (err) {
-        setError(err.message || "Failed to add budget")
+        setError(err || "Failed to add budget")
     }
   }
 
 
   function handleSubmit(e) {  
       e.preventDefault()
-    
+      e.stopPropagation()
+
       if(!validateMaxInput(maxRef.current.value)) {
           setError("Invalid Budget Max format, ensure this is a number")
           return
@@ -96,3 +95,5 @@ export default function AddBudgetModal({ show, handleClose }) {
     </Modal>
   )
 }
+
+export default React.memo(AddBudgetModal);

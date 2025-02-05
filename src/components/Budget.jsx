@@ -4,7 +4,7 @@ import { currencyFormatter } from "./utils";
 
 export default function Budget({ name, amount, max, onAddExpenseClick, hideButtons, onViewExpensesClick }) {
     return (
-        <Card style={{ backgroundColor: "cyan"}}>
+        <Card style={{ backgroundColor: "cyan", margin: "2px"}}>
             <Card.Body>
                 <Card.Title className="d-flex justify-content-between-align-items-baseline
                 fw-normal mb-3">
