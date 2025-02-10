@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect, useRef } from "react"
-import { v4 as uuidV4 } from 'uuid'
+import React, { useContext, useState, useEffect, useRef, useMemo } from "react"
+// import { v4 as uuidV4 } from 'uuid'
 import axios from "axios"
 import { useLoginStatus } from "./LoginContext"
+import { isEqual } from "lodash"
 
 
 const BudgetsContext = React.createContext()
@@ -17,6 +18,8 @@ export const BudgetsProvider = ({ children }) => {
     const [expenses, setExpenses] = useState([]) 
     const { loginStatus, setIsLoading } = useLoginStatus()
     const initialLoadComplete = useRef(false)
+    console.log("BudgetsProvider mounted");
+
 
     // Initial data fetch test
     useEffect(() => {
@@ -24,7 +27,7 @@ export const BudgetsProvider = ({ children }) => {
             const fetchInitialData = async () => {
                 try {
                     setIsLoading(true)
-                    await checkBudgets()
+                    await checkBudgets(budgets)
                     await checkExpenses()
                     initialLoadComplete.current = true
                 } catch(error) {
@@ -38,16 +41,20 @@ export const BudgetsProvider = ({ children }) => {
     }, [loginStatus])
 
 
-    const checkBudgets = async () => {
+    const checkBudgets = async (currentBudgets = []) => {
+        console.log('Checking budgets')
         try {
             setIsLoading(true);
             const response = await axios.get('/budget-api/check_budgets.php', {
                 withCredentials: true
             });
-            
-            if(response.data.message === "Budgets Found") {
+            if (!isEqual(currentBudgets, response.data.data)) {
                 setBudgets(response.data.data)
-            } 
+            }
+            
+            // if(response.data.message === "Budgets Found") {
+            //     setBudgets(response.data.data)
+            // } 
         } catch(error) {
             console.error('There was an error checking budgets: ', error)
             } finally {
@@ -57,13 +64,14 @@ export const BudgetsProvider = ({ children }) => {
     
 
     const checkExpenses = async () => {
+        console.log('Checking expenses');
         try {
             setIsLoading(true); 
             const response = await axios.get('/budget-api/check_expenses.php', {
                 withCredentials: true
             });
             if(response.data.message === "Expenses Found") {
-                setExpenses(response.data.data)
+                setExpenses(response.data.data);
             } 
             
         } catch(error) {
@@ -86,7 +94,7 @@ export const BudgetsProvider = ({ children }) => {
                     return prevBudgets.filter(budget => budget.id !== id)
                 });
 
-                await checkBudgets();
+                await checkBudgets(budgets);
                 await checkExpenses();
 
                 return { success: true, message: "Budget successfully deleted" };
@@ -108,85 +116,126 @@ export const BudgetsProvider = ({ children }) => {
     }
 
 
+    // const addExpense = async (description, amount, budget_id) => {
+    //   try {
+    //     setIsLoading(true);
+    //     const response = await axios.post(
+    //       "/budget-api/update_expenses.php",
+    //       { description, amount, budget_id },
+    //       { withCredentials: true },
+    //       {
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         },
+    //       }
+    //     )
+    //     if (response.data.status === "success") {
+    //         setExpenses((prevExpenses) => {
+    //             return [
+    //               ...prevExpenses,
+    //               { id: uuidV4(), budget_id, amount, description },
+    //             ]
+    //         })
+    //        await checkExpenses() 
+    //       return response.data.status;
+            
+    //     } else {
+    //         throw new Error(response.data.message || "Expense not added 😑");
+    //     }
+    //   } catch (error) {
+    //     console.error("Expense not added due to: ", error);
+    //     if (error.response) {
+    //         throw new Error(error.response.data.message || "An error occurred")
+    //     } else if (error.request) {
+    //         throw new Error("No response received from the server")
+    //     } else {
+    //         throw new Error("Error setting up the request")
+    //     }
+    //   } finally {
+    //     setIsLoading(false);
+    //   }
+    // }
+    
     const addExpense = async (description, amount, budget_id) => {
-      try {
-        setIsLoading(true);
-        const response = await axios.post(
-          "/budget-api/update_expenses.php",
-          { description, amount, budget_id },
-          { withCredentials: true },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        if (response.data.status === "success") {
-            setExpenses((prevExpenses) => {
-                return [
-                  ...prevExpenses,
-                  { id: uuidV4(), budget_id, amount, description },
-                ]
-            })
-           await checkExpenses() 
-          return response.data.status;
-            
-        } else {
-            throw new Error(response.data.message || "Expense not added 😑");
-        }
-      } catch (error) {
-        console.error("Expense not added due to: ", error);
-        if (error.response) {
-            throw new Error(error.response.data.message || "An error occurred")
-        } else if (error.request) {
-            throw new Error("No response received from the server")
-        } else {
-            throw new Error("Error setting up the request")
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    
-
-
-    const addBudget = async ({name, max}) => {
         try {
-            setIsLoading(true)
-            const response = await axios.post('/budget-api/update_budget.php', 
-                { name, max }, 
-                { 
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                }     
+            setIsLoading(true);
+            const response = await axios.post(
+                "/budget-api/update_expenses.php",
+                { description, amount, budget_id },
+                { withCredentials: true }
             );
-            
-            if(response.data.status === 'success') {
-                setBudgets((prevBudgets) => {
-                  const existingBudget = prevBudgets.find((budget) => budget.name === name);
-                  if(existingBudget) {
-                    throw new Error(response.data.message || 'Budget not added 😑')
-                  } else {
-                    return [...prevBudgets, { id: uuidV4(), name, max }];
-                  }
-                });
+            if (response.data.status === "success") {
+                await checkExpenses(); // Fetch the latest data from the server
+                return response.data.status;
+            } else {
+                throw new Error(response.data.message || "Expense not added 😑");
+            }
+        } catch (error) {
+            console.error("Expense not added due to: ", error);
+            throw new Error(error.response?.data?.message || "An error occurred");
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-            await checkBudgets();
-            return { success: true, message: "Budget has been added successfully"}
-            } 
-            else { 
-                throw new Error(response.data.message || 'Budget not added 😑')
-            }
-        } catch(error) {
-                throw new Error(error.response?.data?.message || error.message || 'Failed to add budget')
-            }
-            finally {
-                setIsLoading(false)
-            }
-    }
+    // const addBudget = async ({name, max}) => {
+    //     try {
+    //         setIsLoading(true)
+    //         const response = await axios.post('/budget-api/update_budget.php', 
+    //             { name, max }, 
+    //             { 
+    //                 withCredentials: true,
+    //                 headers: {
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //             }     
+    //         );
+            
+    //         if(response.data.status === 'success') {
+    //             setBudgets((prevBudgets) => {
+    //               const existingBudget = prevBudgets.find((budget) => budget.name === name);
+    //               if(existingBudget) {
+    //                 throw new Error(response.data.message || 'Budget not added 😑')
+    //               } else {
+    //                 return [...prevBudgets, { id: uuidV4(), name, max }];
+    //               }
+    //             });
+
+    //         await checkBudgets(budgets);
+    //         return { success: true, message: "Budget has been added successfully"}
+    //         } 
+    //         else { 
+    //             throw new Error(response.data.message || 'Budget not added 😑')
+    //         }
+    //     } catch(error) {
+    //             throw new Error(error.response?.data?.message || error.message || 'Failed to add budget')
+    //         }
+    //         finally {
+    //             setIsLoading(false)
+    //         }
+    // }
     
+    const addBudget = async ({ name, max }) => {
+        try {
+            setIsLoading(true);
+            const response = await axios.post(
+                '/budget-api/update_budget.php',
+                { name, max },
+                { withCredentials: true }
+            );
+            if (response.data.status === 'success') {
+                await checkBudgets(); // Fetch the latest data from the server
+                return { success: true, message: "Budget has been added successfully" };
+            } else {
+                throw new Error(response.data.message || 'Budget not added 😑');
+            }
+        } catch (error) {
+            throw new Error(error.response?.data?.message || error.message || 'Failed to add budget');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const  deleteExpense = async (id, budgetId) => {
         try {
             setIsLoading(true)
@@ -217,13 +266,25 @@ export const BudgetsProvider = ({ children }) => {
         }
     }
 
-    return <BudgetsContext.Provider value={{
+    const value = useMemo(() => ({
         budgets,
         expenses,
-        getBudgetExpenses,
+        getBudgetExpenses: (budgetId) => expenses.filter((expense) => expense.budget_id === budgetId),
         addExpense,
         addBudget,
         deleteBudget,
-        deleteExpense
-    }}>{ children }</BudgetsContext.Provider>
+        deleteExpense,
+      }), [budgets, expenses]);
+
+      return <BudgetsContext.Provider value={value}>{children}</BudgetsContext.Provider>;
+
+    // return <BudgetsContext.Provider value={{
+    //     budgets,
+    //     expenses,
+    //     getBudgetExpenses,
+    //     addExpense,
+    //     addBudget,
+    //     deleteBudget,
+    //     deleteExpense
+    // }}>{ children }</BudgetsContext.Provider>
 }

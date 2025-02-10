@@ -71,6 +71,7 @@ const router = createBrowserRouter([
 
 function Main() {
   const [isWide, setIsWide] = useState(window.innerWidth > 1200)
+  console.log("Main mounted")
 
   useEffect(() => {
     function handleResize() {

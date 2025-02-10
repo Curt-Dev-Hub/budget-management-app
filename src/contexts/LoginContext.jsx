@@ -1,8 +1,7 @@
 // this context can be used to control login state and refuse access to certain routes when user is not authenticated
 
-import { createContext, useContext , useState, useEffect } from "react"
+import { createContext, useContext , useState, useEffect, useMemo } from "react"
 import axios from "axios"
-import PropTypes from 'prop-types';
 
 export const LoginContext = createContext(false)
 
@@ -15,6 +14,7 @@ export const LoginProvider = ({ children }) => {
     const [loginStatus, setLoginStatus] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [name, setName] = useState(null)
+    console.log("LoginProvider mounted")
 
 
     // Configure defaults
@@ -117,18 +117,27 @@ export const LoginProvider = ({ children }) => {
             return false;
         }
     }    
-        
-    return <LoginContext.Provider value={{
+
+    const value = useMemo(() => ({
         name,
         loginStatus,
         setLoginStatus,
+        isLoading,
+        setIsLoading,
         logout,
         checkSession,
-        isLoading,
-        setIsLoading
-    }}>{ children }</LoginContext.Provider>
+    }), [name, loginStatus, isLoading]);
+
+    return <LoginContext.Provider value={value}>{children}</LoginContext.Provider>;
+        
+    // return <LoginContext.Provider value={{
+    //     name,
+    //     loginStatus,
+    //     setLoginStatus,
+    //     logout,
+    //     checkSession,
+    //     isLoading,
+    //     setIsLoading
+    // }}>{ children }</LoginContext.Provider>
 }    
 
-LoginProvider.propTypes = {
-    children: PropTypes.node
-}
