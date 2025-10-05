@@ -1,5 +1,4 @@
 :root {
-  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;  */
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -24,8 +23,7 @@ body {
   background-color: inherit;
 }
 
-/* yellow gradient background for dashboard and home cards */
-#yellow-gradient1, #yellow-gradient2 {
+#yellow-gradient1, #yellow-gradient2, #yellow-gradient3 {
   background-image: linear-gradient(to bottom right, #202d2200, yellow);
 }
 
@@ -36,7 +34,7 @@ body {
 }
 
 /* styling for form links */
-.form-link {
+.form-link, .policy-link {
   color: #FFD700;
   text-decoration: none;
   font-weight: bold;
@@ -44,9 +42,9 @@ body {
   border-bottom: 2px solid transparent;
 }
 
-.form-link:hover {
-  color: #FFA500; /* Darker shade of yellow on hover */
-  border-bottom: 2px solid #FFA500; /* Add border bottom on hover */
+.form-link:hover, .policy-link:hover {
+  color: #FFA500; 
+  border-bottom: 2px solid #FFA500; 
 }
 .card {
   background-color: inherit;

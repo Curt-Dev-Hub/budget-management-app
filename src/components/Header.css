@@ -12,3 +12,12 @@
 .navbar-toggler {
     background: cyan;
 }
+.dropdown-menu {
+    background: #000000e8;
+}
+.dropdown-item {
+    color: aliceblue;
+}
+#basic-nav-dropdown:focus {
+    color: yellow;
+}
