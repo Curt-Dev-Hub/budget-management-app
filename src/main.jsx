@@ -2,26 +2,17 @@ import React, { useEffect, useState, lazy } from 'react';
 import ReactDOM from 'react-dom/client'
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
-// import ErrorPage from './routes/Error-page.jsx';
 import Home from './routes/Home.jsx';
-// import Dashboard from './routes/Dashboard.jsx';
-// import Login from './routes/Login.jsx';
-// import Register from './routes/Register.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import Learn_More from './routes/Learn_More.jsx';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
-// import PrivacyPolicy from './routes/PrivacyPolicy.jsx';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
 import './index.css'
-// import Budget_Edit from './components/Budget_Edit.jsx';
 import { BudgetsProvider } from './contexts/BudgetsContext.jsx';
 import { LoginProvider } from './contexts/LoginContext.jsx';
-// import Logout from './routes/Logout.jsx';
-
 const ErrorPage = lazy(() => import('./routes/Error-page.jsx'))
 const Dashboard = lazy(() => import('./routes/Dashboard.jsx'))
 const Learn_More = lazy(() => import('./routes/Learn_More.jsx'))
@@ -94,7 +85,6 @@ function Main() {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-<React.StrictMode>
   <ErrorBoundary>
     <LoginProvider>
       <BudgetsProvider>
@@ -102,5 +92,4 @@ root.render(
       </BudgetsProvider>
     </LoginProvider>
   </ErrorBoundary>
-</React.StrictMode>
 );

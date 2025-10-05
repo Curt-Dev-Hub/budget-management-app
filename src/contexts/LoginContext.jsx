@@ -11,10 +11,10 @@ export function useLoginStatus() {
 
 
 export const LoginProvider = ({ children }) => {
-    const [loginStatus, setLoginStatus] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
-    const [name, setName] = useState(null)
-    console.log("LoginProvider mounted")
+    const [loginStatus, setLoginStatus] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [name, setName] = useState(null);
+    console.log("LoginProvider mounted");
 
 
     // Configure defaults
@@ -83,7 +83,6 @@ export const LoginProvider = ({ children }) => {
             const parsedData = parseResponse(response.data)
             setName(parsedData.data.name || "Generic")
             console.log(parsedData.data.name)
-            console.log(name)
             setLoginStatus(parsedData.data.message || false)
         } catch(error) {
             console.error('There was an error while checking login status: ', error)
@@ -93,13 +92,15 @@ export const LoginProvider = ({ children }) => {
         }
     }
 
+
     useEffect(() => {
         checkSession();
-    }, [])
+    }, []);
 
 
     // Centralised logout
     const logout = async () => {
+        console.log("Attempting Logout");
         try {
             const response = await axios.get('/budget-api/logout.php', {} , {
                 withCredentials: true
@@ -126,18 +127,8 @@ export const LoginProvider = ({ children }) => {
         setIsLoading,
         logout,
         checkSession,
-    }), [name, loginStatus, isLoading]);
+    }), [name, loginStatus, isLoading, checkSession]);
 
     return <LoginContext.Provider value={value}>{children}</LoginContext.Provider>;
-        
-    // return <LoginContext.Provider value={{
-    //     name,
-    //     loginStatus,
-    //     setLoginStatus,
-    //     logout,
-    //     checkSession,
-    //     isLoading,
-    //     setIsLoading
-    // }}>{ children }</LoginContext.Provider>
 }    
 

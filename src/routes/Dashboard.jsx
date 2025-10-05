@@ -3,12 +3,14 @@ import './Dashboard.css'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { useBudgets } from '../contexts/BudgetsContext';
+import { useLoginStatus } from '../contexts/LoginContext.jsx'
 import { useEffect, useState } from 'react';
 import { color } from 'chart.js/helpers';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
-const Dashboard = ({name}) => {
+const Dashboard = () => {
+  const { name } = useLoginStatus();
   const { budgets, expenses } = useBudgets()
   const [sortBudgets, setSortBudgets] = useState([])
 
@@ -135,16 +137,10 @@ const Dashboard = ({name}) => {
                 <b> ({latestBudget?.name})</b>
               </p>
             )}
-            {/* <p>Added £332.20</p> */}
+            {/*/! need to implement relevant currency symbol*/}
             <p>{`Your current total Expenses: ${parseFloat(totalExpenses).toFixed(2)}`} <br />
             {`From a Max Budget value of: ${parseFloat(totalBudget).toFixed(2)}`}
             </p>
-            {/* <div className="cta-wrapper">
-              <Button variant="danger" href="#" target="">
-                Add Expenses
-              </Button>
-              <Button variant="success">Add/Edit Budgets</Button>
-            </div> */}
           </div>
         </Col>
       </Row>
@@ -166,5 +162,3 @@ const Dashboard = ({name}) => {
 
 
 export default Dashboard;
-
-// style={{ width: "100%", maxWidth: "400px", margin: "0 auto" }}

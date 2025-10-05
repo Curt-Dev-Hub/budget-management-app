@@ -1,53 +1,170 @@
+// import './Login.css';
+// import { useContext, useRef, useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import Form from "react-bootstrap/Form";
+// import Button from "react-bootstrap/Button";
+// import axios from 'axios';
+
+// import { LoginContext } from '../contexts/LoginContext.jsx'
+
+
+// function Login() {
+//     const navigate = useNavigate()
+//     const userNameRef = useRef("")
+//     const passwordRef = useRef("")
+//     const { setLoginStatus, checkSession } = useContext(LoginContext);
+
+//     const [ errorMessage, setErrorMessage ] = useState("")
+
+//     function handleSubmit(e) {
+//         e.preventDefault();
+//         console.log("Login form submitted");
+//         axios
+//             .post("http://localhost/budget-api/login.php", {
+//                 username: userNameRef.current.value,
+//                 password: passwordRef.current.value
+//             },
+//             {
+//               timeout: 5000,
+//               timeoutErrorMessage: "No response from MySQL"
+//             }, 
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 }
+//             })
+          
+//             .then((response) => {
+//                 console.log("Login response:", response.data);
+//                 if(response.data.status === "success") {
+//                     console.log("Login successful, setting login status and redirecting");
+//                     setLoginStatus(true);
+//                     checkSession();
+//                     navigate("/dashboard");
+//                 } 
+//                 else  {
+//                     console.log("Login failed with message:", response.data.message);
+//                     setErrorMessage(`${response.data.message}`)
+//                 }
+//             })
+//             .catch((error) => {
+//                 console.log("Login error:", error);
+//                 console.log("Error status:", error.response?.status);
+//                 if(error.status === 401) {
+//                     setErrorMessage("Invalid credentials: You have entered an incorrect Username or Password")
+//                 } 
+//             })
+//     }
+
+//     return (
+//       <>
+//         <h1 style={{paddingLeft: "15px"}}>Login</h1>
+//         <div className="login_register_container">
+//           <Form className="login_register_form" onSubmit={handleSubmit}>
+//             {errorMessage && (
+//               <div className="alert alert-danger" role="alert">
+//                 {errorMessage}
+//               </div>
+//             )}
+//             <Form.Group className="login_register" controlId="username">
+//               <Form.Label>Username</Form.Label>
+//               <Form.Control
+//                 ref={userNameRef}
+//                 type="text"
+//                 placeholder="Your username"
+//                 required
+//               />
+//             </Form.Group>
+//             <br />
+//             <Form.Group>
+//               <Form.Label>Password</Form.Label>
+//               <Form.Control
+//                 ref={passwordRef}
+//                 type="password"
+//                 placeholder="Your password"
+//                 required
+//               />
+//             </Form.Group>
+//             <Button as="input" type="submit" value="Login" />{" "}
+//             <p>
+//               Not yet a member?{" "}
+//               <a className="form-link" href="register">
+//                 Register Here
+//               </a>
+//             </p>
+//           </Form>
+//         </div>
+//       </>
+//     );
+    
+// }
+
+// export default Login;
+
+
 import './Login.css';
 import { useContext, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
-
-import { LoginContext } from '../contexts/LoginContext.jsx'
-
+import { LoginContext } from '../contexts/LoginContext.jsx';
 
 function Login() {
     const userNameRef = useRef("")
     const passwordRef = useRef("")
-    const { setLoginStatus } = useContext(LoginContext)
-    const { checkSession } = useContext(LoginContext)
+    const { setLoginStatus, checkSession } = useContext(LoginContext) // Now checkSession will be available
+    const [errorMessage, setErrorMessage] = useState("")
+    const navigate = useNavigate()
 
-    const [ errorMessage, setErrorMessage ] = useState("")
-
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        axios
-            .post("http://localhost/budget-api/login.php", {
-                username: userNameRef.current.value,
-                password: passwordRef.current.value
-            },
-            {
-              timeout: 5000,
-              timeoutErrorMessage: "No response from MySQL"
-            }, 
-            {
-                headers: {
-                    'Content-Type': 'application/json'
+        setErrorMessage(""); // Clear previous errors
+        
+        try {
+            console.log("Attempting login...");
+            
+            const response = await axios.post(
+                "http://localhost/budget-api/login.php", 
+                {
+                    username: userNameRef.current.value,
+                    password: passwordRef.current.value
+                },
+                {
+                    timeout: 5000,
+                    headers: { 'Content-Type': 'application/json' }
                 }
-            })
-          
-            .then((response) => {
-                if(response.data.status === "success") {
-                    setLoginStatus(true);
-                    checkSession()
-                    window.location.href = "/dashboard";
-                } 
-                else  {
-                    setErrorMessage(`${response.data.message}`)
-                }
-            })
-            .catch((error) => {
-                console.log(error.status)
-                if(error.status === 401) {
-                    setErrorMessage("Invalid credentials: You have entered an incorrect Username or Password")
-                } 
-            })
+            );
+
+            console.log("Login response:", response.data);
+
+            if(response.data.status === "success") {
+                console.log("Login successful, updating state...");
+                
+                // Update login status immediately
+                setLoginStatus(true);
+                
+                // Verify session and get latest user data
+                await checkSession();
+                
+                console.log("Redirecting to dashboard...");
+                navigate("/dashboard", { replace: true });
+                
+            } else {
+                setErrorMessage(response.data.message || "Login failed");
+            }
+            
+        } catch (error) {
+            console.error("Login error:", error);
+            
+            if(error.response?.status === 401) {
+                setErrorMessage("Invalid credentials: You have entered an incorrect Username or Password");
+            } else if (error.code === 'ECONNABORTED') {
+                setErrorMessage("Request timeout. Please try again.");
+            } else {
+                setErrorMessage("Login failed. Please check your connection and try again.");
+            }
+        }
     }
 
     return (
@@ -90,7 +207,6 @@ function Login() {
         </div>
       </>
     );
-    
 }
 
 export default Login;
