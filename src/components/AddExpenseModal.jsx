@@ -2,7 +2,7 @@ import { Modal, Form, Button, CloseButton } from "react-bootstrap";
 import { useRef, useEffect, useState } from "react"; //* We want to track the form values name and max 
 import { UNCATEGORISED_BUDGET_ID, useBudgets } from "../contexts/BudgetsContext";
 
-
+// eslint-disable-next-line react/prop-types
 export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) {
     const descriptionRef = useRef("")
     const amountRef = useRef(0)
@@ -52,23 +52,14 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
         )
         
         setSuccess(`${response} Expense added successfully`)
-        setError("") //! testing
-
-        // setTimeout(() => { //! testing
-        //     handleClose()
-        //     setSuccess("")
-        //     if(descriptionRef.current) descriptionRef.current.value = ""
-        //     if(amountRef.current) amountRef.current.value = 0
-        //     if(budgetIdRef.current) budgetIdRef.current.value = defaultBudgetId
-        // }, 2000)
+        setError("") 
                   
       } catch (err) {
           setError(err.message || "Failed to add Expense")
-          setSuccess("") //! testing
+          setSuccess("") 
       }
     }
     
-  //!  -------------------------------------------------------------------------------------------------------------------------------------
 
     function handleSubmit(e) {  
         e.preventDefault()
@@ -134,7 +125,7 @@ export default function AddExpenseModal({ show, handleClose, defaultBudgetId }) 
               step={0.01}
             />
           </Form.Group>
-          {/* ------------------------------------------------------------ */}
+          
           <Form.Group className="mb-3" controlId="budgetId">
             <Form.Label>Which budget is this for?</Form.Label>
             

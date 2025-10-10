@@ -1,62 +1,9 @@
-// import { Navigate } from 'react-router-dom'
-// import { useLoginStatus } from '../contexts/LoginContext.jsx'
-// import { Blocks } from 'react-loader-spinner'
-
-
-// const PrivateRoute = ({ component: Component, ...rest }) => {
-
-//     const { loginStatus, isLoading, name } = useLoginStatus()
-
-//     if(isLoading) return (
-//       <Blocks
-//         height="80"
-//         width="80"
-//         color="#4fa94d"
-//         ariaLabel="blocks-loading"
-//         wrapperStyle={{margin: "300px auto"}}
-//         wrapperClass="blocks-wrapper"
-//         visible={true}
-//       />
-//     ); 
-
-//     return loginStatus ? (
-//         <Component name={ name } {...rest} />
-//     ) : (
-//       <Navigate to="/login" replace />
-//     );
-// }
-
-// export default PrivateRoute
-
-// import { memo, useEffect, useState } from "react";
-// import { useLoginStatus } from '../contexts/LoginContext.jsx'
-// import { Navigate } from "react-router-dom";
-
-// const PrivateRoute = ({ component: Component, ...rest }) => {
-//   const { loginStatus, name } = useLoginStatus();
-//   const [loggedIn, setLoggedIn] = useState(false);
-//   console.log("PrivateRoute Mounted");
-
-//   useEffect(() => {
-//     setLoggedIn(loginStatus);
-//   }, [loginStatus]);
-
-//   if(!loginStatus) {
-//     console.log("Redirecting to login. loggedIn Status:", loggedIn)
-//   }
-//   return loggedIn ? ( <Component name={ name } {...rest} /> ) : ( <Navigate to="/login" replace/> );
-// };
-
-// export default memo(PrivateRoute);
-
-
-
-//-----------------------------------------------
-
+import { Navigate } from 'react-router-dom';
 import React, { useMemo } from 'react';
-import { useLoginStatus } from '../contexts/LoginContext.jsx'
-import { Blocks } from 'react-loader-spinner'
+import { useLoginStatus } from '../contexts/LoginContext.jsx';
+import { Blocks } from 'react-loader-spinner';
 
+// eslint-disable-next-line react/prop-types
 const PrivateRoute = React.memo(({ component: Component, ...rest }) => {
   const { loginStatus, isLoading } = useLoginStatus();
 
@@ -83,5 +30,7 @@ const PrivateRoute = React.memo(({ component: Component, ...rest }) => {
 
   return <MemoizedComponent {...rest} />;
 });
+
+PrivateRoute.displayName = 'PrivateRoute';
 
 export default PrivateRoute;

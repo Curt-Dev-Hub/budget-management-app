@@ -1,9 +1,9 @@
 import { Container, Card, Button, Row, Col } from 'react-bootstrap'
-import './Dashboard.css'
+import './Dashboard.css';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import { useBudgets } from '../contexts/BudgetsContext';
-import { useLoginStatus } from '../contexts/LoginContext.jsx'
+import { useLoginStatus } from '../contexts/LoginContext.jsx';
 import { useEffect, useState } from 'react';
 import { color } from 'chart.js/helpers';
 
@@ -68,8 +68,6 @@ const Dashboard = () => {
       + ':' + date.getMinutes()
       + ':' + date.getSeconds();
 
-
-  
 
   const greeting = date.getHours() < 12 ? 'morning' : date.getHours() <= 17 ? 'afternoon' : 'evening';
 
@@ -137,7 +135,7 @@ const Dashboard = () => {
                 <b> ({latestBudget?.name})</b>
               </p>
             )}
-            {/*/! need to implement relevant currency symbol*/}
+            {/*--------------------need to implement relevant currency symbol--------------*/}
             <p>{`Your current total Expenses: ${parseFloat(totalExpenses).toFixed(2)}`} <br />
             {`From a Max Budget value of: ${parseFloat(totalBudget).toFixed(2)}`}
             </p>

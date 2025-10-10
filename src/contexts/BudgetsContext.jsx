@@ -44,7 +44,7 @@ export const BudgetsProvider = ({ children }) => {
         console.log('Checking budgets')
         try {
             // setIsLoading(true);
-            const response = await axios.get('/budget-api/check_budgets.php', {
+            const response = await axios.get('/check_budgets.php', {
                 withCredentials: true
             });
             if (!isEqual(currentBudgets, response.data.data)) {
@@ -62,7 +62,7 @@ export const BudgetsProvider = ({ children }) => {
         console.log('Checking expenses');
         try {
             // setIsLoading(true); 
-            const response = await axios.get('/budget-api/check_expenses.php', {
+            const response = await axios.get('/check_expenses.php', {
                 withCredentials: true
             });
             if(response.data.message === "Expenses Found") {
@@ -79,7 +79,7 @@ export const BudgetsProvider = ({ children }) => {
     
     const deleteBudget = async ({ id }) => {
         try {
-            const response = await axios.delete('/budget-api/update_budget.php', {
+            const response = await axios.delete('/update_budget.php', {
                 data: { id }, 
                 withCredentials: true
             });
@@ -109,7 +109,7 @@ export const BudgetsProvider = ({ children }) => {
         try {
             // setIsLoading(true);
             const response = await axios.post(
-                "/budget-api/update_expenses.php",
+                "/update_expenses.php",
                 { description, amount, budget_id },
                 { withCredentials: true }
             );
@@ -131,7 +131,7 @@ export const BudgetsProvider = ({ children }) => {
         try {
             // setIsLoading(true);
             const response = await axios.post(
-                '/budget-api/update_budget.php',
+                '/update_budget.php',
                 { name, max },
                 { withCredentials: true }
             );
@@ -151,7 +151,7 @@ export const BudgetsProvider = ({ children }) => {
     const  deleteExpense = async (id, budgetId) => {
         try {
             // setIsLoading(true)
-            const response = await axios.delete('/budget-api/update_expenses.php', {
+            const response = await axios.delete('/update_expenses.php', {
                 data: { id, budgetId },
                 withCredentials: true
             }, {

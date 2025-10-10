@@ -32,7 +32,7 @@ function Register() {
           return
         }
         axios
-            .post("https://localhost/budget-api/register.php", {
+            .post("/register.php", {
                 name: nameRef.current.value,
                 username: userNameRef.current.value,
                 password: passwordRef.current.value

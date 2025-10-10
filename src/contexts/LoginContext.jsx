@@ -1,7 +1,7 @@
 // this context can be used to control login state and refuse access to certain routes when user is not authenticated
 
 import { createContext, useContext , useState, useEffect, useMemo } from "react"
-import axios from "axios"
+import axios from "axios";
 
 export const LoginContext = createContext(false)
 
@@ -20,7 +20,7 @@ export const LoginProvider = ({ children }) => {
     // Configure defaults
     useEffect(() => {
         // global configuration
-        axios.defaults.baseURL = 'http://localhost'; // Base URL
+        axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;  // Base URL
         axios.defaults.withCredentials = true;
         
         // Add request interceptor for logging
@@ -55,32 +55,16 @@ export const LoginProvider = ({ children }) => {
     }, []);
 
 
-    // Parsing function to handle extra characters appearing before the incoming JSON object
-    const parseResponse = (responseString) => {
-        // Find the first '{' to start parsing JSON
-        const jsonStartIndex = responseString.indexOf('{');
-        
-        if (jsonStartIndex !== -1) {
-          const jsonString = responseString.slice(jsonStartIndex);
-          try {
-            return JSON.parse(jsonString);
-          } catch (error) {
-            console.error('Error parsing response:', error);
-            return null;
-          }
-        }
-        
-        return null;
-      };
 
     // user authentication check method
     const checkSession = async () => {
         try {
-            const response = await axios.get('/budget-api/includes/session.inc.php', {
+            const response = await axios.get('/includes/session.inc.php', {
                 withCredentials: true,
                 timeout: 5000
             });
-            const parsedData = parseResponse(response.data)
+            
+            const parsedData = response.data;
             setName(parsedData.data.name || "Generic")
             console.log(parsedData.data.name)
             setLoginStatus(parsedData.data.message || false)
@@ -102,7 +86,7 @@ export const LoginProvider = ({ children }) => {
     const logout = async () => {
         console.log("Attempting Logout");
         try {
-            const response = await axios.get('/budget-api/logout.php', {} , {
+            const response = await axios.get('/logout.php', {} , {
                 withCredentials: true
             });
             if(response.data.status === "success") {

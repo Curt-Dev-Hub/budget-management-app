@@ -1,4 +1,4 @@
-import React, { useEffect, useState, lazy } from 'react';
+import { useEffect, useState, lazy } from 'react';
 import ReactDOM from 'react-dom/client'
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
