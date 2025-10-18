@@ -1,17 +1,18 @@
-<!doctype html>
-<html lang="en">
+echo '<!DOCTYPE html>
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="pound.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Personal Budget App</title>
+    <meta charset="utf-8">
+    <title>Budget Management App</title>
+    
+
+<script>
+      sessionStorage.redirect = location.href;
+      location.replace("https://curt-dev-hub.github.io/budget-management-app/");
+    </script>
   </head>
   <body>
-    <div id="root"></div>
-    <!-- <script type="module" src="/src/main.jsx"></script> -->
+    <h1>Redirecting...</h1>
+    <p>If not redirected, <a href="https://curt-dev-hub.github.io/budget-management-app/">click here</a>.</p>
   </body>
-</html>
-<!-- CREDITS -->
+</html>' > public/404.html
 
-<!-- Icon -->
-<!-- <a href="https://www.flaticon.com/free-icons/pound" title="pound icons">Pound icons created by NajmunNahar - Flaticon</a> -->
