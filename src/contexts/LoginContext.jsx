@@ -9,12 +9,12 @@ export function useLoginStatus() {
     return useContext(LoginContext)
 }
 
-
+// eslint-disable-next-line react/prop-types
 export const LoginProvider = ({ children }) => {
     const [loginStatus, setLoginStatus] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [name, setName] = useState(null);
-    console.log("LoginProvider mounted");
+    // console.log("LoginProvider mounted");
 
 
     // Configure defaults
@@ -26,11 +26,11 @@ export const LoginProvider = ({ children }) => {
         // Add request interceptor for logging
         const requestInterceptor = axios.interceptors.request.use(
             config => {
-                console.log('Axios Request Config:', config);
+                // console.log('Axios Request Config:', config);
                 return config;
             },
             error => {
-                console.error('Axios Request Error:', error);
+                // console.error('Axios Request Error:', error);
                 return Promise.reject(error);
             }
         );
@@ -38,11 +38,11 @@ export const LoginProvider = ({ children }) => {
         // Add response interceptor for logging
         const responseInterceptor = axios.interceptors.response.use(
             response => {
-                console.log('Axios Full Response:', response);
+                // console.log('Axios Full Response:', response);
                 return response;
             },
             error => {
-                console.error('Axios Response Error:', error);
+                // console.error('Axios Response Error:', error);
                 return Promise.reject(error);
             }
         );
@@ -66,7 +66,6 @@ export const LoginProvider = ({ children }) => {
             
             const parsedData = response.data;
             setName(parsedData.data.name || "Generic")
-            console.log(parsedData.data.name)
             setLoginStatus(parsedData.data.message || false)
         } catch(error) {
             console.error('There was an error while checking login status: ', error)

@@ -12,12 +12,13 @@ export function useBudgets() {
     return useContext(BudgetsContext)
 }
 
+// eslint-disable-next-line react/prop-types
 export const BudgetsProvider = ({ children }) => {
     const [budgets, setBudgets] = useState([]) 
     const [expenses, setExpenses] = useState([]) 
     const { loginStatus, setIsLoading } = useLoginStatus()
     const initialLoadComplete = useRef(false)
-    console.log("BudgetsProvider mounted");
+    // console.log("BudgetsProvider mounted");
 
 
     // Initial data fetch test
@@ -30,20 +31,19 @@ export const BudgetsProvider = ({ children }) => {
                     await checkExpenses()
                     initialLoadComplete.current = true
                 } catch(error) {
-                    console.error('Initial data fetch error:', error)
+                    console.error('Initial data fetch error:', error);
                 } finally {
-                    setIsLoading(false)
+                    setIsLoading(false);
                 }
             }
-            fetchInitialData()
+            fetchInitialData();
         }
     }, [loginStatus])
 
 
     const checkBudgets = async (currentBudgets = []) => {
-        console.log('Checking budgets')
+        // console.log('Checking budgets')
         try {
-            // setIsLoading(true);
             const response = await axios.get('/check_budgets.php', {
                 withCredentials: true
             });
@@ -52,16 +52,13 @@ export const BudgetsProvider = ({ children }) => {
             }
         } catch(error) {
             console.error('There was an error checking budgets: ', error)
-            } finally {
-                // setIsLoading(false);
-            }
+        } 
     }
     
 
     const checkExpenses = async () => {
-        console.log('Checking expenses');
+        // console.log('Checking expenses');
         try {
-            // setIsLoading(true); 
             const response = await axios.get('/check_expenses.php', {
                 withCredentials: true
             });
@@ -71,10 +68,8 @@ export const BudgetsProvider = ({ children }) => {
             
         } catch(error) {
             console.error('There was an error receiving expenses: ', error)
-            } finally {
-                // setIsLoading(false);
-            }
-        }
+        } 
+    }
     
     
     const deleteBudget = async ({ id }) => {
@@ -107,7 +102,6 @@ export const BudgetsProvider = ({ children }) => {
     
     const addExpense = async (description, amount, budget_id) => {
         try {
-            // setIsLoading(true);
             const response = await axios.post(
                 "/update_expenses.php",
                 { description, amount, budget_id },
@@ -122,14 +116,11 @@ export const BudgetsProvider = ({ children }) => {
         } catch (error) {
             console.error("Expense not added due to: ", error);
             throw new Error(error.response?.data?.message || "An error occurred");
-        } finally {
-            // setIsLoading(false);
-        }
+        } 
     };
     
     const addBudget = async ({ name, max }) => {
         try {
-            // setIsLoading(true);
             const response = await axios.post(
                 '/update_budget.php',
                 { name, max },
@@ -143,14 +134,11 @@ export const BudgetsProvider = ({ children }) => {
             }
         } catch (error) {
             throw new Error(error.response?.data?.message || error.message || 'Failed to add budget');
-        } finally {
-            // setIsLoading(false);
         }
     };
 
     const  deleteExpense = async (id, budgetId) => {
         try {
-            // setIsLoading(true)
             const response = await axios.delete('/update_expenses.php', {
                 data: { id, budgetId },
                 withCredentials: true
@@ -172,9 +160,6 @@ export const BudgetsProvider = ({ children }) => {
             const errorMessage = error.response?.data?.message || error.message || "There was an error deleting the expense"
             console.error('Delete expense error:', errorMessage)
             throw new Error(errorMessage)
-        }
-        finally {
-            // setIsLoading(false)
         }
     }
 

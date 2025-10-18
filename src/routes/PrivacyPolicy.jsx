@@ -1,92 +1,316 @@
-import { Card } from "react-bootstrap"
+import { useState, useEffect } from "react";
 
 function PrivacyPolicy() {
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isLargeScreen = windowWidth >= 992;
+
   return (
-    <>
-      <h1 className="mt-4" style={{paddingLeft: "15px"}}>Privacy Policy</h1>
-      <Card bg="primary" text="light" style={{ width: '90%', margin: '43px auto' }}>
-        <Card.Body>
-          <Card.Text>
-            This privacy policy is provided in a layered format so you can click through to the specific areas set out below.
-          </Card.Text>
-          <ol style={{ textAlign: 'left', margin: '48px auto', width: '86%' }}>
-            <li><a className="policy-link" href="#purpose">Important Information and purpose of this privacy policy </a></li>
-            <li><a className="policy-link" href="#data">The data that is collected about you</a></li>
-            <li><a className="policy-link" href="#collection">How is your personal data collected</a></li>
-            <li><a className="policy-link" href="#use">How is your personal data used</a></li>
-            <li><Card.Link className="policy-link" href="">This is a card link</Card.Link></li>
-          </ol>
-          <h3 id="purpose">1. Purpose of this privacy policy</h3>
-          <Card.Text>
-            This privacy policy aims to give you information on how your personal data is collected and processed through your 
-            use of this website, including any data you may provide through this website.  <br /> <br />
-            
-            Please contact myself using the below details if you have any questions about this privacy policy or your information. <br /> <br />
+    <div style={{
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      backgroundColor: '#ffffff'
+    }}>
+      {/* Teal Background Section */}
+      <div style={{
+        background: 'linear-gradient(135deg, #20b2aa 0%, #48d1cc 100%)',
+        padding: '3rem 1.25rem',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        {/* Hero */}
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '2rem',
+          maxWidth: '900px',
+          margin: '0 auto 2rem auto'
+        }}>
+          <h1 style={{
+            margin: '0 0 0.5rem',
+            color: '#2b3959',
+            fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+            fontWeight: '700',
+            letterSpacing: '-0.5px',
+            textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+          }}>
+            Privacy Policy
+          </h1>
+          <p style={{
+            margin: '0',
+            color: 'rgba(255,255,255,0.95)',
+            fontSize: '1rem',
+            lineHeight: '1.5',
+            textShadow: '0 1px 2px rgba(0,0,0,0.05)'
+          }}>
+            Clear, concise information about what we collect, why we collect it and how we keep it safe.
+          </p>
+        </div>
 
-            <b>Contact Details</b>
-            <br /> <br />
-            Full name of legal entity: Curtis King<br />
-            Email address: curt_king@coolsite.net<br /> <br />
-            
-            You have the right to make a complaint at any time to the Information Commissioners Office (ICO), 
-            the UK supervisory authority for data protection issues (www.ico.org.uk). I would, however, appreciate the chance to deal with your 
-            concerns before you approach the ICO so please contact me in the first instance. <br /> <br />   
+        {/* Content Container */}
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          width: '100%',
+          display: 'grid',
+          gridTemplateColumns: isLargeScreen ? '280px 1fr' : '1fr',
+          gap: isLargeScreen ? '1.5rem' : '0',
+          flex: 1
+        }}>
+          {/* Table of Contents */}
+          {isLargeScreen && (
+            <div style={{
+              position: 'sticky',
+              top: '1rem',
+              height: 'fit-content'
+            }}>
+              <div style={{
+                backgroundColor: 'rgba(255,255,255,0.95)',
+                borderRadius: '12px',
+                padding: '1.5rem',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                backdropFilter: 'blur(10px)'
+              }}>
+                <h5 style={{
+                  margin: '0 0 0.75rem 0',
+                  color: '#20b2aa',
+                  fontWeight: '700',
+                  fontSize: '1rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  Contents
+                </h5>
+                <nav style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.5rem'
+                }}>
+                  {[
+                    { href: '#purpose', text: '1. Purpose' },
+                    { href: '#data', text: '2. Data Collected' },
+                    { href: '#collection', text: '3. How We Collect' },
+                    { href: '#use', text: '4. How We Use' },
+                    { href: '#contact', text: '5. Contact' }
+                  ].map((item, i) => (
+                    <a
+                      key={i}
+                      href={item.href}
+                      style={{
+                        color: '#2b3959',
+                        textDecoration: 'none',
+                        padding: '0.6rem 0.75rem',
+                        borderRadius: '6px',
+                        transition: 'all 0.15s ease',
+                        cursor: 'pointer',
+                        borderLeft: '3px solid transparent',
+                        fontSize: '0.95rem',
+                        fontWeight: '500'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(32,178,170,0.1)';
+                        e.currentTarget.style.borderLeftColor = '#20b2aa';
+                        e.currentTarget.style.paddingLeft = '1rem';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.borderLeftColor = 'transparent';
+                        e.currentTarget.style.paddingLeft = '0.75rem';
+                      }}
+                    >
+                      {item.text}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </div>
+          )}
 
-            <b>Changes to the privacy policy and the duty to inform us of changes</b>
-            <br /> <br />
+          {/* Main Content */}
+          <div style={{
+            backgroundColor: 'rgba(255,255,255,0.98)',
+            borderRadius: '12px',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
+            backdropFilter: 'blur(10px)',
+            padding: isLargeScreen ? '2.5rem' : '1.5rem',
+            lineHeight: '1.7'
+          }}>
+            {/* Section 1 */}
+            <section style={{ marginBottom: '2rem', scrollMarginTop: '100px' }} id="purpose">
+              <h2 style={{
+                color: '#2b3959',
+                fontSize: '1.15rem',
+                fontWeight: '700',
+                margin: '0 0 0.75rem 0',
+                letterSpacing: '-0.3px'
+              }}>
+                1. Purpose of this privacy policy
+              </h2>
+              <p style={{
+                color: '#6b7380',
+                lineHeight: '1.7',
+                fontSize: '0.98rem',
+                margin: '0'
+              }}>
+                This privacy policy explains how personal data is collected, processed and stored when you use this application.
+                If you have questions, please get in touch using the contact details below.
+              </p>
+            </section>
 
-            This privacy policy will be kept under regular review. This version was last reviewed on 06 December 2025.  <br /> <br />
-
-            <b>Third Party Links</b> <br /> <br />
-
-            This website does not contain links to any third party websites, plug-ins and applications.
-          </Card.Text>
-          <h3 id="data">2. The data that is collected about you</h3>
-          <Card.Text>
-              Personal data, or personal information, means any information about an individual from which that person can be identified. 
-              It does not include data where the identity has been removed (anonymous data). <br /> <br />
-              
-              I may collect, use, store different kinds of personal data about you which I have grouped together as follows: <br /> <br />
-              
-              Identity Data includes first name, last name, username or similar identifier, title, date
-          </Card.Text>
-          <ul style={{ textAlign: 'left' }}>
-            <li><b>Identity Data</b> includes a name, username and password</li>
-            {/* <li>Contact Data</li> */}
-            <li><b>Technical Data</b> includes internet protocol (IP) address and browser 
-            characteristics (User Agent), timestamp, operating system, on the devices you use to access this website.
-            </li>
-            <li><b>Usage Data</b> includes information on any errors you may encounter whilst using the website.</li>
-          </ul> <br /> <br />
-          <h3 id="collection">3. How is your personal data collected</h3>
-          <Card.Text>
-            Although your use of this application does not require you to provide 
-            data that directly and personally identifies you, any data that 
-            may be linked to you is treated as such. <br /> <br />
-            Different methods are used to collect data from and about you including through: <br /> <br />
-          </Card.Text>
-          <ul style={{ textAlign: 'left' }}>
-            <li><b>Direct interactions</b>. You may give me your Identity Data by filling in forms or by corresponding with me by post, phone, email or otherwise. This includes personal data you provide when you:
-              <ul>
-                <li>create an account on my website</li>
-                <li>give me feedback or contact me</li>
+            {/* Section 2 */}
+            <section style={{ marginBottom: '2rem', scrollMarginTop: '100px' }} id="data">
+              <h2 style={{
+                color: '#2b3959',
+                fontSize: '1.15rem',
+                fontWeight: '700',
+                margin: '0 0 0.75rem 0',
+                letterSpacing: '-0.3px'
+              }}>
+                2. The data that is collected about you
+              </h2>
+              <p style={{
+                color: '#6b7380',
+                lineHeight: '1.7',
+                fontSize: '0.98rem',
+                margin: '0 0 0.75rem 0'
+              }}>
+                Personal data means any information from which a person can be identified. We may collect:
+              </p>
+              <ul style={{
+                color: '#6b7380',
+                lineHeight: '1.7',
+                fontSize: '0.98rem',
+                paddingLeft: '1.75rem',
+                margin: '0'
+              }}>
+                <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#2b3959' }}>Identity data:</strong> name, username.</li>
+                <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#2b3959' }}>Technical data:</strong> IP address, browser user agent, timestamps.</li>
+                <li><strong style={{ color: '#2b3959' }}>Usage data:</strong> interactions and errors encountered in the app.</li>
               </ul>
-            </li>
-            <li><b>Your interactions</b>. As you interact with my website, I may automatically collect Technical Data about your equipment. I collect this personal data by using cookies, server logs and other similar technologies.</li>
-          </ul> <br /> <br />
-          <h3 id="use">4. How your data is used</h3>
-          <Card.Text>
-          Data collected will be used for the following purposes: <br /> <br />
-          a) to help keep this website secure, including for security monitoring and identity management; <br />
-          b) to investigate and prevent potential fraud or illegal activities including to prevent cyber-attacks and to detect bots; <br />
-          c) to analyze, develop, improve and optimize the use, function and performance of this website; <br />
-          d) for research and development purposes, including to analyze, develop, improve and optimize our Services; <br />
-          f) to comply with applicable laws and regulations, disclosure or other legal process requests, and in the context of dispute resolution.
-        </Card.Text>
-        </Card.Body>
-      </Card>
-    </>
-  )
+            </section>
+
+            {/* Section 3 */}
+            <section style={{ marginBottom: '2rem', scrollMarginTop: '100px' }} id="collection">
+              <h2 style={{
+                color: '#2b3959',
+                fontSize: '1.15rem',
+                fontWeight: '700',
+                margin: '0 0 0.75rem 0',
+                letterSpacing: '-0.3px'
+              }}>
+                3. How is your personal data collected
+              </h2>
+              <p style={{
+                color: '#6b7380',
+                lineHeight: '1.7',
+                fontSize: '0.98rem',
+                margin: '0'
+              }}>
+                We collect data via direct interactions (forms), automated technologies (cookies, logs) and when you contact us for support.
+              </p>
+            </section>
+
+            {/* Section 4 */}
+            <section style={{ marginBottom: '2rem', scrollMarginTop: '100px' }} id="use">
+              <h2 style={{
+                color: '#2b3959',
+                fontSize: '1.15rem',
+                fontWeight: '700',
+                margin: '0 0 0.75rem 0',
+                letterSpacing: '-0.3px'
+              }}>
+                4. How your data is used
+              </h2>
+              <p style={{
+                color: '#6b7380',
+                lineHeight: '1.7',
+                fontSize: '0.98rem',
+                margin: '0 0 0.75rem 0'
+              }}>
+                We use data to:
+              </p>
+              <ol style={{
+                color: '#6b7380',
+                lineHeight: '1.7',
+                fontSize: '0.98rem',
+                paddingLeft: '1.75rem',
+                margin: '0'
+              }}>
+                <li style={{ marginBottom: '0.5rem' }}>Protect and secure the app.</li>
+                <li style={{ marginBottom: '0.5rem' }}>Improve functionality and performance.</li>
+                <li>Investigate and prevent fraud or abuse.</li>
+              </ol>
+            </section>
+
+            {/* Section 5 */}
+            <section style={{ marginBottom: '2rem', scrollMarginTop: '100px' }} id="contact">
+              <h2 style={{
+                color: '#2b3959',
+                fontSize: '1.15rem',
+                fontWeight: '700',
+                margin: '0 0 0.75rem 0',
+                letterSpacing: '-0.3px'
+              }}>
+                5. Contact
+              </h2>
+              <p style={{
+                color: '#6b7380',
+                lineHeight: '1.7',
+                fontSize: '0.98rem',
+                margin: '0'
+              }}>
+                Full name: [Curtis King]<br />
+                Email: <a href="mailto:example@email.com" style={{
+                  color: '#20b2aa',
+                  textDecoration: 'none',
+                  fontWeight: '600',
+                  transition: 'opacity 0.2s ease'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                  [curt_king@coolsite.net]
+                </a>
+              </p>
+              <div style={{
+                backgroundColor: 'rgba(32,178,170,0.08)',
+                padding: '1rem',
+                borderRadius: '8px',
+                borderLeft: '3px solid #20b2aa',
+                marginTop: '1rem'
+              }}>
+                <p style={{
+                  color: '#6b7380',
+                  lineHeight: '1.7',
+                  fontSize: '0.95rem',
+                  margin: '0'
+                }}>
+                  If you have concerns you may contact the Information Commissioner&apos;s Office (ICO) in the UK. I would prefer you contact me first so I can resolve concerns quickly.
+                </p>
+              </div>
+            </section>
+
+            {/* Footer */}
+            <footer style={{
+              borderTop: '1px solid rgba(32,178,170,0.15)',
+              paddingTop: '1rem',
+              marginTop: '2rem',
+              color: '#6b7380',
+              textAlign: 'right',
+              fontSize: '0.85rem'
+            }}>
+              <small>Last reviewed: 10 October 2025</small>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default PrivacyPolicy
+
+export default PrivacyPolicy;
